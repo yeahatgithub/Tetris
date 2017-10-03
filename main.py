@@ -5,8 +5,10 @@ from pygame.locals import *
 SCREEN_WIDTH = 900
 SCREEN_HEIGHT = 900
 CELL_WIDTH = 40
-WORK_AREA_WIDTH = CELL_WIDTH * 10
-WORK_AREA_HEIGHT = CELL_WIDTH * 20
+COLUMN_NUM = 10
+LINE_NUM = 20
+WORK_AREA_WIDTH = CELL_WIDTH * COLUMN_NUM
+WORK_AREA_HEIGHT = CELL_WIDTH * LINE_NUM
 WORK_AREA_LEFT = (SCREEN_WIDTH - WORK_AREA_WIDTH) // 2
 WORK_AREA_TOP = SCREEN_HEIGHT - WORK_AREA_HEIGHT
 EDEG_COLOR = (0, 0, 0)
@@ -56,14 +58,18 @@ def check_events(cell_position):
             sys.exit()
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RIGHT:
-                print("按下了右箭头")
+                #print("按下了右箭头")
                 left, top = cell_position
-                return (left + CELL_WIDTH, top)
+                if left < WORK_AREA_LEFT + (COLUMN_NUM - 1) * CELL_WIDTH:
+                    left = left + CELL_WIDTH  #向右移动一格
+                return (left, top)
         elif event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT:
-                print("按下了左箭头")
+                #print("按下了左箭头")
                 left, top = cell_position
-                return (left - CELL_WIDTH, top)
+                if left > WORK_AREA_LEFT:
+                    left = left - CELL_WIDTH  # 向右移动一格
+                return (left, top)
 
     return  cell_position
 
