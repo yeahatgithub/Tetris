@@ -13,7 +13,7 @@ EDEG_COLOR = (0, 0, 0)
 CELL_COLOR = (100, 100, 100)
 BG_COLOR = (230, 230, 230)
 
-def drawWorkArea(screen):
+def draw_workarea(screen):
     '''绘制游戏区域，即10X20的表格区域'''
     for r in range(21):
         pygame.draw.line(screen, EDEG_COLOR, (WORK_AREA_LEFT, WORK_AREA_TOP + r * CELL_WIDTH),
@@ -43,15 +43,20 @@ def main():
         screen.fill(BG_COLOR)
 
         #绘制游戏区
-        drawWorkArea(screen)
+        draw_workarea(screen)
         #绘制小方块
-        cell_left_top = (WORK_AREA_LEFT, WORK_AREA_TOP)
-        cell_width_height = (CELL_WIDTH, CELL_WIDTH)
-        cellRect = Rect(cell_left_top, cell_width_height)
-        pygame.draw.rect(screen, CELL_COLOR, cellRect)
+        draw_cell(screen, WORK_AREA_LEFT, WORK_AREA_TOP)
 
         #让最近绘制的屏幕可见
         pygame.display.flip()
+
+
+def draw_cell(screen, left, top):
+    cell_left_top = (left, top)
+    cell_width_height = (CELL_WIDTH, CELL_WIDTH)
+    cellRect = Rect(cell_left_top, cell_width_height)
+    pygame.draw.rect(screen, CELL_COLOR, cellRect)
+
 
 if __name__ == '__main__':
     main()
