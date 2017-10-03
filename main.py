@@ -30,40 +30,48 @@ def main():
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT) )
     pygame.display.set_caption("俄罗斯方块")
 
+    cell_position = (WORK_AREA_LEFT, WORK_AREA_TOP)
+
     #游戏主循环
     while True:
         #事件处理
-        check_events()
+        cell_position = check_events(cell_position)
+        #print("main(), cell_position = ", cell_position)
         #设定屏幕背景色
         screen.fill(BG_COLOR)
 
         #绘制游戏区
         draw_workarea(screen)
         #绘制小方块
-        draw_cell(screen, WORK_AREA_LEFT, WORK_AREA_TOP)
+        draw_cell(screen, cell_position)
 
         #让最近绘制的屏幕可见
         pygame.display.flip()
 
 
-def check_events():
+def check_events(cell_position):
     # 监视键盘和鼠标事件
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RIGHT:
-                print("方块向右移动")
-                pass
+                print("按下了右箭头")
+                left, top = cell_position
+                return (left + CELL_WIDTH, top)
         elif event.type == pygame.KEYUP:
-            pass
+            if event.key == pygame.K_LEFT:
+                print("按下了左箭头")
+                left, top = cell_position
+                return (left - CELL_WIDTH, top)
+
+    return  cell_position
 
 
-def draw_cell(screen, left, top):
-    cell_left_top = (left, top)
+def draw_cell(screen, cell_position):
     cell_width_height = (CELL_WIDTH, CELL_WIDTH)
-    cellRect = Rect(cell_left_top, cell_width_height)
-    pygame.draw.rect(screen, CELL_COLOR, cellRect)
+    cell_rect = Rect(cell_position, cell_width_height)
+    pygame.draw.rect(screen, CELL_COLOR, cell_rect)
 
 
 if __name__ == '__main__':
