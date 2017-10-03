@@ -1,5 +1,6 @@
 import sys
 import pygame
+from pygame.locals import *
 
 SCREEN_WIDTH = 900
 SCREEN_HEIGHT = 900
@@ -9,15 +10,18 @@ WORK_AREA_HEIGHT = CELL_WIDTH * 20
 WORK_AREA_LEFT = (SCREEN_WIDTH - WORK_AREA_WIDTH) // 2
 WORK_AREA_TOP = SCREEN_HEIGHT - WORK_AREA_HEIGHT
 EDEG_COLOR = (0, 0, 0)
+CELL_COLOR = (100, 100, 100)
+BG_COLOR = (230, 230, 230)
 
 def drawWorkArea(screen):
-    #pygame.draw.line(screen, (0, 0, 0), (100, 100), (200, 200))
+    '''绘制游戏区域，即10X20的表格区域'''
     for r in range(21):
         pygame.draw.line(screen, EDEG_COLOR, (WORK_AREA_LEFT, WORK_AREA_TOP + r * CELL_WIDTH),
                          (WORK_AREA_LEFT + WORK_AREA_WIDTH, WORK_AREA_TOP + r * CELL_WIDTH))
     for c in range(11):
         pygame.draw.line(screen, EDEG_COLOR, (WORK_AREA_LEFT + c * CELL_WIDTH, WORK_AREA_TOP),
                          (WORK_AREA_LEFT + c * CELL_WIDTH, WORK_AREA_TOP + WORK_AREA_HEIGHT))
+
 
 def main():
     #初始化pygame
@@ -27,7 +31,7 @@ def main():
     pygame.display.set_caption("俄罗斯方块")
 
     #屏幕背景色
-    bg_color = (230, 230, 230)
+
 
     #游戏主循环
     while True:
@@ -36,9 +40,16 @@ def main():
             if event.type == pygame.QUIT:
                 sys.exit()
         #设定屏幕背景色
-        screen.fill(bg_color)
+        screen.fill(BG_COLOR)
 
+        #绘制游戏区
         drawWorkArea(screen)
+        #绘制小方块
+        cell_left_top = (WORK_AREA_LEFT, WORK_AREA_TOP)
+        cell_width_height = (CELL_WIDTH, CELL_WIDTH)
+        cellRect = Rect(cell_left_top, cell_width_height)
+        pygame.draw.rect(screen, CELL_COLOR, cellRect)
+
         #让最近绘制的屏幕可见
         pygame.display.flip()
 
