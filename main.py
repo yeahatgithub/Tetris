@@ -30,15 +30,10 @@ def main():
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT) )
     pygame.display.set_caption("俄罗斯方块")
 
-    #屏幕背景色
-
-
     #游戏主循环
     while True:
-        #监视键盘和鼠标事件
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                sys.exit()
+        #事件处理
+        check_events()
         #设定屏幕背景色
         screen.fill(BG_COLOR)
 
@@ -49,6 +44,19 @@ def main():
 
         #让最近绘制的屏幕可见
         pygame.display.flip()
+
+
+def check_events():
+    # 监视键盘和鼠标事件
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            sys.exit()
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_RIGHT:
+                print("方块向右移动")
+                pass
+        elif event.type == pygame.KEYUP:
+            pass
 
 
 def draw_cell(screen, left, top):
