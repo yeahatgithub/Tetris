@@ -1,6 +1,9 @@
 import sys
 import pygame
 
+def drawWorkArea(screen):
+    pygame.draw.line(screen, (0, 0, 0), (100, 100), (200, 200))
+
 def main():
     #初始化pygame
     pygame.init()
@@ -19,6 +22,8 @@ def main():
                 sys.exit()
         #设定屏幕背景色
         screen.fill(bg_color)
+
+        drawWorkArea(screen)
         #让最近绘制的屏幕可见
         pygame.display.flip()
 
