@@ -5,6 +5,7 @@ from pygame.locals import *
 #各种配置
 from settings import *
 from Cell import Cell
+from pieces import Piece
 
 def draw_workarea(screen):
     '''绘制游戏区域，即10X20的表格区域'''
@@ -24,46 +25,48 @@ def main():
     pygame.display.set_caption("俄罗斯方块")
     pygame.key.set_repeat(10, 100)  #一直按下某个键，每过100毫秒就引发一个KEYDOWN事件
 
-    cell = Cell(screen)
+    #cell = Cell(screen)
+    piece = Piece('S', screen)
 
     #游戏主循环
     while True:
         #事件处理
-        check_events(cell)
+        check_events(piece)
         #设定屏幕背景色
         screen.fill(BG_COLOR)
 
         #绘制游戏区
         draw_workarea(screen)
         #刷新小方块
-        cell.paint()
+        #cell.paint()
+        piece.paint()
 
         #让最近绘制的屏幕可见
         pygame.display.flip()
 
 
-def check_events(cell):
+def check_events(piece):
     # 监视键盘和鼠标事件
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
         elif event.type == pygame.KEYDOWN:
-            return on_key_down(event, cell)
+            return on_key_down(event, piece)
         elif event.type == pygame.KEYUP:
             pass
             #on_key_up(event, cell)
 
 
 
-def on_key_down(event, cell):
+def on_key_down(event, piece):
     if event.key == pygame.K_RIGHT:
         # print("按下了右箭头")
-        cell.move_right()
+        piece.move_right()
     elif event.key == pygame.K_LEFT:
         # print("按下了左箭头")
-        cell.move_left()
+        piece.move_left()
     elif event.key == pygame.K_DOWN:
-        cell.move_down()
+        piece.move_down()
 
 # def on_key_up(event, cell):
 #     if event.key == pygame.K_RIGHT:
