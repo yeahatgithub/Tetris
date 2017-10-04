@@ -6,13 +6,12 @@ class Piece():
     def __init__(self, shape, screen):
         self.x = 3
         self.y = 0
-        self.shape = shape
+        self.shape_template = PIECES[shape]
         self.turn = 0   #翻转了几次，决定显示的模样
         self.screen = screen
 
     def paint(self):
-        shape_template = PIECES[self.shape]
-        shape_turn = shape_template[self.turn]
+        shape_turn = self.shape_template[self.turn]
         #print(shape_turn)
         for r in range(len(shape_turn)):
             for c in range(len(shape_turn[0])):
@@ -26,12 +25,32 @@ class Piece():
         cell_rect = Rect(cell_position, cell_width_height)
         pygame.draw.rect(self.screen, CELL_COLOR, cell_rect)
 
+    def can_move_right(self):
+        '''判断能否向右移动方块'''
+        shape_turn = self.shape_template[self.turn]
+        for r in range(len(shape_turn)):
+            for c in range(len(shape_turn[0])):
+                if shape_turn[r][c] == 'O':
+                    if self.x + c == COLUMN_NUM - 1:
+                        return False
+        return True
+
     def move_right(self):
-        if self.x < (COLUMN_NUM - 1):
+        if self.can_move_right():
             self.x = self.x + 1  # 向右移动一格
 
+    def can_move_left(self):
+        '''判断能否向左移动方块'''
+        shape_turn = self.shape_template[self.turn]
+        for r in range(len(shape_turn)):
+            for c in range(len(shape_turn[0])):
+                if shape_turn[r][c] == 'O':
+                    if self.x + c == 0:
+                        return False
+        return True
+
     def move_left(self):
-        if self.x > 0:
+        if self.can_move_left():
             self.x -= 1
 
     def move_down(self):
