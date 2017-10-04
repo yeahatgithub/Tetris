@@ -7,8 +7,6 @@ class Cell():
     def __init__(self, screen):
         self.x = 0
         self.y = 0
-        # self.moving_right = False
-        # self.moving_left = False
         self.screen = screen
 
     def move_right(self):
