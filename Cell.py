@@ -19,6 +19,10 @@ class Cell():
         if self.x > 0:
             self.x -= 1
 
+    def move_down(self):
+        if self.y < (LINE_NUM - 1):
+            self.y += 1
+
     def paint(self):
         cell_position = (self.x * CELL_WIDTH + WORK_AREA_LEFT,
                          self.y * CELL_WIDTH + WORK_AREA_TOP)

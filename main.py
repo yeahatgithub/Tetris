@@ -60,6 +60,8 @@ def on_key_down(event, cell):
     elif event.key == pygame.K_LEFT:
         # print("按下了左箭头")
         cell.move_left()
+    elif event.key == pygame.K_DOWN:
+        cell.move_down()
 
 
 if __name__ == '__main__':
