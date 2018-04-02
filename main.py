@@ -1,7 +1,6 @@
 import sys
 
 import pygame
-from pygame.locals import *
 #各种配置
 from settings import *
 from Cell import Cell
@@ -51,10 +50,10 @@ def check_events(piece):
         if event.type == pygame.QUIT:
             sys.exit()
         elif event.type == pygame.KEYDOWN:
-            return on_key_down(event, piece)
+            on_key_down(event, piece)
         elif event.type == pygame.KEYUP:
             pass
-            #on_key_up(event, cell)
+            # on_key_up(event, piece)
 
 
 
@@ -68,11 +67,11 @@ def on_key_down(event, piece):
     elif event.key == pygame.K_DOWN:
         piece.move_down()
 
-# def on_key_up(event, cell):
-#     if event.key == pygame.K_RIGHT:
-#         # print("按下了右箭头")
-#     elif event.key == pygame.K_LEFT:
-#         # print("按下了左箭头")
+def on_key_up(event, piece):
+    if event.key == pygame.K_RIGHT:
+        print("松开了右箭头")
+    elif event.key == pygame.K_LEFT:
+        print("松开了左箭头")
 
 
 if __name__ == '__main__':

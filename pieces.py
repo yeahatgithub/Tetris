@@ -2,12 +2,17 @@ from settings import *
 from pygame import *
 import pygame
 
+#Piece是方块类
+#(x, y)是包围方块的矩形框的左上角在游戏区的坐标
+#shape是方块代号，用作PIECES字典的键。
+#turn是方块的翻转次数，决定方块的角度
+#screen是窗口对象
 class Piece():
     def __init__(self, shape, screen):
         self.x = 3
         self.y = 0
         self.shape_template = PIECES[shape]
-        self.turn = 0   #翻转了几次，决定显示的模样
+        self.turn = 0   #未翻转
         self.screen = screen
 
     def paint(self):
@@ -54,5 +59,15 @@ class Piece():
             self.x -= 1
 
     def move_down(self):
-        if self.y < (LINE_NUM - 1):
+        if self.can_move_down():
             self.y += 1
+
+    def can_move_down(self):
+        '''判断能否向左移动方块'''
+        shape_turn = self.shape_template[self.turn]
+        for r in range(len(shape_turn)):
+            for c in range(len(shape_turn[0])):
+                if shape_turn[r][c] == 'O':
+                    if self.y + r == LINE_NUM - 1:
+                        return False   #方块已到达底部
+        return True
