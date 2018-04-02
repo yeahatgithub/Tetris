@@ -25,9 +25,9 @@ class Piece():
                     self.draw_cell(self.x + c, self.y + r)
 
     def draw_cell(self, x, y):
-        cell_position = (x * CELL_WIDTH + WORK_AREA_LEFT,
-                         y * CELL_WIDTH + WORK_AREA_TOP)
-        cell_width_height = (CELL_WIDTH, CELL_WIDTH)
+        cell_position = (x * CELL_WIDTH + WORK_AREA_LEFT + 1,
+                         y * CELL_WIDTH + WORK_AREA_TOP + 1)
+        cell_width_height = (CELL_WIDTH - 2, CELL_WIDTH - 2)
         cell_rect = Rect(cell_position, cell_width_height)
         pygame.draw.rect(self.screen, PIECE_COLORS[self.shape], cell_rect)
 
