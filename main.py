@@ -1,5 +1,5 @@
 import sys
-
+import random
 import pygame
 #各种配置
 from settings import *
@@ -16,6 +16,7 @@ def draw_workarea(screen):
                          (WORK_AREA_LEFT + c * CELL_WIDTH, WORK_AREA_TOP + WORK_AREA_HEIGHT))
 
 
+g_should_create_piece = True
 def main():
     #初始化pygame
     pygame.init()
@@ -25,15 +26,18 @@ def main():
     pygame.key.set_repeat(10, 100)  #一直按下某个键，每过100毫秒就引发一个KEYDOWN事件
 
     #cell = Cell(screen)
-    piece = Piece('S', screen)
+    # piece = Piece('S', screen)
 
     #游戏主循环
     while True:
+        if g_should_create_piece:
+            piece = create_piece(screen)
+
         #事件处理
         check_events(piece)
-        #设定屏幕背景色
-        screen.fill(BG_COLOR)
 
+        #设定屏幕背景色.screen.fill()将刷新整个窗口。
+        screen.fill(BG_COLOR)
         #绘制游戏区
         draw_workarea(screen)
         #刷新小方块
@@ -70,6 +74,8 @@ def on_key_down(event, piece):
         piece.turn_once()
     elif event.key == pygame.K_SPACE:
         piece.goto_bottom()
+        global g_should_create_piece
+        g_should_create_piece = True
 
 
 def on_key_up(event, piece):
@@ -77,6 +83,14 @@ def on_key_up(event, piece):
         print("松开了右箭头")
     elif event.key == pygame.K_LEFT:
         print("松开了左箭头")
+
+def create_piece(screen):
+    shape = random.randint(0, len(SHAPES) - 1)
+    p = Piece(SHAPES[shape], screen)
+    global g_should_create_piece
+    g_should_create_piece = False
+    # print('create_piece()...')
+    return p
 
 
 if __name__ == '__main__':
