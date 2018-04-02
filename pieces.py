@@ -71,3 +71,9 @@ class Piece():
                     if self.y + r == LINE_NUM - 1:
                         return False   #方块已到达底部
         return True
+
+
+    def turn_once(self):
+        self.turn += 1
+        if self.turn == len(self.shape_template):
+            self.turn = 0
