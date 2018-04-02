@@ -71,6 +71,7 @@ def on_key_down(event, piece):
     elif event.key == pygame.K_SPACE:
         piece.goto_bottom()
 
+
 def on_key_up(event, piece):
     if event.key == pygame.K_RIGHT:
         print("松开了右箭头")

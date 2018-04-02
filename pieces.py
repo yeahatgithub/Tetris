@@ -64,13 +64,14 @@ class Piece():
             self.y += 1
 
     def can_move_down(self):
-        '''判断能否向左移动方块'''
+        '''判断能否向下移动方块'''
         shape_turn = self.shape_template[self.turn]
         for r in range(len(shape_turn)):
             for c in range(len(shape_turn[0])):
                 if shape_turn[r][c] == 'O':
                     if self.y + r == LINE_NUM - 1:
                         return False   #方块已到达底部
+        #TODO(iamdouble@163.com): 要检测有没有碰到未消掉的方块。碰到，就返回False。
         return True
 
 
