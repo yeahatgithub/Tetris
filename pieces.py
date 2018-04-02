@@ -78,3 +78,9 @@ class Piece():
         self.turn += 1
         if self.turn == len(self.shape_template):
             self.turn = 0
+
+    def goto_bottom(self):
+        '''直接坠落到底部'''
+        '''这里，底部是指按游戏规则再也无法往下移动的位置。'''
+        while self.can_move_down():
+            self.y += 1

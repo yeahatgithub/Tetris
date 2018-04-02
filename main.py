@@ -68,6 +68,8 @@ def on_key_down(event, piece):
         piece.move_down()
     elif event.key == pygame.K_UP:
         piece.turn_once()
+    elif event.key == pygame.K_SPACE:
+        piece.goto_bottom()
 
 def on_key_up(event, piece):
     if event.key == pygame.K_RIGHT:
