@@ -11,6 +11,7 @@ class Piece():
     def __init__(self, shape, screen):
         self.x = 3
         self.y = 0
+        self.shape = shape
         self.shape_template = PIECES[shape]
         self.turn = 0   #未翻转
         self.screen = screen
@@ -28,7 +29,7 @@ class Piece():
                          y * CELL_WIDTH + WORK_AREA_TOP)
         cell_width_height = (CELL_WIDTH, CELL_WIDTH)
         cell_rect = Rect(cell_position, cell_width_height)
-        pygame.draw.rect(self.screen, CELL_COLOR, cell_rect)
+        pygame.draw.rect(self.screen, PIECE_COLORS[self.shape], cell_rect)
 
     def can_move_right(self):
         '''判断能否向右移动方块'''
