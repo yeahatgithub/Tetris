@@ -4,7 +4,7 @@ import pygame
 #各种配置
 from settings import *
 from pieces import Piece
-from workarea import WorkArea
+from gamearea import GameArea
 
 def draw_workarea(screen):
     '''绘制游戏区域，即10X20的表格区域'''
@@ -25,15 +25,15 @@ def main():
     pygame.display.set_caption("俄罗斯方块")
     pygame.key.set_repeat(10, 100)  #一直按下某个键，每过100毫秒就引发一个KEYDOWN事件
 
-    work_area = WorkArea(screen)
+    work_area = GameArea(screen)
 
     #游戏主循环
     while True:
         if g_should_create_piece:
-            piece = create_piece(screen)
+            piece = create_piece(screen, work_area)
 
         #事件处理
-        check_events(piece)
+        check_events(piece, work_area)
 
         #设定屏幕背景色.screen.fill()将刷新整个窗口。
         screen.fill(BG_COLOR)
@@ -48,20 +48,20 @@ def main():
         pygame.display.flip()
 
 
-def check_events(piece):
+def check_events(piece, work_area):
     # 监视键盘和鼠标事件
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
         elif event.type == pygame.KEYDOWN:
-            on_key_down(event, piece)
+            on_key_down(event, piece, work_area)
         elif event.type == pygame.KEYUP:
             pass
             # on_key_up(event, piece)
 
 
 
-def on_key_down(event, piece):
+def on_key_down(event, piece, work_area):
     if event.key == pygame.K_RIGHT:
         # print("按下了右箭头")
         piece.move_right()
@@ -84,9 +84,9 @@ def on_key_up(event, piece):
     elif event.key == pygame.K_LEFT:
         print("松开了左箭头")
 
-def create_piece(screen):
+def create_piece(screen, work_area):
     shape = random.randint(0, len(SHAPES) - 1)
-    p = Piece(SHAPES[shape], screen)
+    p = Piece(SHAPES[shape], screen, work_area)
     global g_should_create_piece
     g_should_create_piece = False
     # print('create_piece()...')
