@@ -3,8 +3,8 @@ import random
 import pygame
 #各种配置
 from settings import *
-from Cell import Cell
 from pieces import Piece
+from workarea import WorkArea
 
 def draw_workarea(screen):
     '''绘制游戏区域，即10X20的表格区域'''
@@ -25,8 +25,7 @@ def main():
     pygame.display.set_caption("俄罗斯方块")
     pygame.key.set_repeat(10, 100)  #一直按下某个键，每过100毫秒就引发一个KEYDOWN事件
 
-    #cell = Cell(screen)
-    # piece = Piece('S', screen)
+    work_area = WorkArea(screen)
 
     #游戏主循环
     while True:
@@ -39,9 +38,10 @@ def main():
         #设定屏幕背景色.screen.fill()将刷新整个窗口。
         screen.fill(BG_COLOR)
         #绘制游戏区
-        draw_workarea(screen)
-        #刷新小方块
-        #cell.paint()
+        # draw_workarea(screen)
+        work_area.draw()
+
+        #更新方块
         piece.paint()
 
         #让最近绘制的屏幕可见
