@@ -27,6 +27,8 @@ def main():
     game_area = GameArea(screen)
 
     piece = create_piece(screen, game_area)
+
+    game_timer = pygame.time.set_timer(pygame.USEREVENT, game_area.timer_interval)
     #游戏主循环
     while True:
         #事件处理
@@ -55,6 +57,10 @@ def check_events(piece, work_area):
         elif event.type == pygame.KEYUP:
             pass
             # on_key_up(event, piece)
+        elif event.type == pygame.USEREVENT:
+            reached_bottom = piece.move_down()
+            if reached_bottom:
+                piece = create_piece(work_area.screen, work_area)
 
     return piece
 

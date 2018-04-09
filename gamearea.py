@@ -22,6 +22,7 @@ class GameArea():
         for i in range(LINE_NUM):
             self.area.append(line[:])
         # self.desc()
+        self.timer_interval = 1000   #1000ms
 
     def desc(self):
         '''打印20*10的二维矩阵self.area的元素值。用于调试。'''
