@@ -17,7 +17,7 @@ class Piece():
         self.shape_template = PIECES[shape]
         self.turn = 0   #未翻转
         self.screen = screen
-        self.word_area = word_area
+        self.game_area = word_area
 
     def paint(self):
         shape_turn = self.shape_template[self.turn]
@@ -28,7 +28,7 @@ class Piece():
                     self.draw_cell(self.x + c, self.y + r)
 
     def draw_cell(self, x, y):
-        self.word_area.draw_cell(x, y, PIECE_COLORS[self.shape])
+        self.game_area.draw_cell(x, y, PIECE_COLORS[self.shape])
 
     def can_move_right(self):
         '''判断能否向右移动方块'''
@@ -37,6 +37,8 @@ class Piece():
             for c in range(len(shape_turn[0])):
                 if shape_turn[r][c] == 'O':
                     if self.x + c == COLUMN_NUM - 1:
+                        return False
+                    elif self.game_area.is_wall(self.y + r, self.x + c + 1):
                         return False
         return True
 
@@ -52,6 +54,8 @@ class Piece():
                 if shape_turn[r][c] == 'O':
                     if self.x + c == 0:
                         return False
+                    elif self.game_area.is_wall(self.y + r, self.x + c - 1):
+                        return False
         return True
 
     def can_move_down(self):
@@ -62,7 +66,8 @@ class Piece():
                 if shape_turn[r][c] == 'O':
                     if self.y + r == LINE_NUM - 1:
                         return False   #方块已到达底部
-        #TODO(iamdouble@163.com): 要检测有没有碰到未消掉的方块。碰到，就返回False。
+                    elif self.game_area.is_wall(self.y + r + 1, self.x + c):
+                        return False
         return True
 
     def move_left(self):
@@ -93,4 +98,4 @@ class Piece():
         for r in range(len(shape_turn)):
             for c in range(len(shape_turn[0])):
                 if shape_turn[r][c] == 'O':
-                    self.word_area.set_cell((self.y + r, self.x + c), self.shape)
+                    self.game_area.set_cell((self.x + c, self.y + r), self.shape)

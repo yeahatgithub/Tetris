@@ -1,1 +1,7 @@
-venv
+venv/*
+.idea/workspace.xml
+__pycache__/
+/venv/Lib/site-packages/pip-9.0.1-py3.5.egg/pip/_vendor/lockfile/symlinklockfile.py
+/venv/Lib/site-packages/pygame/tests/sprite_test.py
+/venv/Lib/site-packages/pygame/tests/mixer_music_tags.py
+/venv/Lib/site-packages/pygame/examples/data/danger.gif
