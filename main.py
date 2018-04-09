@@ -16,7 +16,6 @@ def draw_workarea(screen):
                          (WORK_AREA_LEFT + c * CELL_WIDTH, WORK_AREA_TOP + WORK_AREA_HEIGHT))
 
 
-g_should_create_piece = True
 def main():
     #初始化pygame
     pygame.init()
@@ -25,21 +24,19 @@ def main():
     pygame.display.set_caption("俄罗斯方块")
     pygame.key.set_repeat(10, 100)  #一直按下某个键，每过100毫秒就引发一个KEYDOWN事件
 
-    work_area = GameArea(screen)
+    game_area = GameArea(screen)
 
+    piece = create_piece(screen, game_area)
     #游戏主循环
     while True:
-        if g_should_create_piece:
-            piece = create_piece(screen, work_area)
-
         #事件处理
-        check_events(piece, work_area)
+        piece = check_events(piece, game_area)
 
         #设定屏幕背景色.screen.fill()将刷新整个窗口。
         screen.fill(BG_COLOR)
         #绘制游戏区
         # draw_workarea(screen)
-        work_area.draw()
+        game_area.draw()
 
         #更新方块
         piece.paint()
@@ -54,10 +51,12 @@ def check_events(piece, work_area):
         if event.type == pygame.QUIT:
             sys.exit()
         elif event.type == pygame.KEYDOWN:
-            on_key_down(event, piece, work_area)
+            piece = on_key_down(event, piece, work_area)
         elif event.type == pygame.KEYUP:
             pass
             # on_key_up(event, piece)
+
+    return piece
 
 
 
@@ -69,13 +68,16 @@ def on_key_down(event, piece, work_area):
         # print("按下了左箭头")
         piece.move_left()
     elif event.key == pygame.K_DOWN:
-        piece.move_down()
+        reached_bottom = piece.move_down()
+        if reached_bottom:
+            piece = create_piece(work_area.screen, work_area)
     elif event.key == pygame.K_UP:
         piece.turn_once()
     elif event.key == pygame.K_SPACE:
         piece.goto_bottom()
-        global g_should_create_piece
-        g_should_create_piece = True
+        piece = create_piece(work_area.screen, work_area)
+
+    return piece
 
 
 def on_key_up(event, piece):

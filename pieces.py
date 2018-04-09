@@ -75,10 +75,13 @@ class Piece():
             self.x -= 1
 
     def move_down(self):
+        '''如果到底了，返回True值，表示已经到底了，否则返回False。'''
         if self.can_move_down():
             self.y += 1
+            return False
         else:
             self.insert_into_wall()
+            return True
 
     def turn_once(self):
         self.turn += 1
