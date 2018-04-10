@@ -46,6 +46,8 @@ class GameArea():
                 if self.area[r][c] != BLANK_LABEL:
                     self.draw_cell(c, r, PIECE_COLORS[self.area[r][c]])
 
+        self.draw_score_label()
+
     def draw_cell(self, x, y, color):
         '''第y行x列的格子里填充color颜色。一种方块对应一种颜色。'''
         cell_position = (x * CELL_WIDTH + WORK_AREA_LEFT + 1,
@@ -53,6 +55,21 @@ class GameArea():
         cell_width_height = (CELL_WIDTH - 2, CELL_WIDTH - 2)
         cell_rect = pygame.Rect(cell_position, cell_width_height)
         pygame.draw.rect(self.screen, color, cell_rect)
+
+    def draw_score_label(self):
+        score_label_font = pygame.font.SysFont('simhei', 28)   #换成'arial'，无法显示中文。
+
+        # 添加下画线
+        score_label_font.set_underline(True)
+        score_label_surface = score_label_font.render(u'得分：', False, SCORE_LABEL_COLOR)
+        score_label_position = (WORK_AREA_LEFT + COLUMN_NUM * CELL_WIDTH + 40, WORK_AREA_TOP)
+        self.screen.blit(score_label_surface, score_label_position)
+
+        score_font = pygame.font.SysFont('arial', 36)
+        score_surface = score_font.render(str(self.score), False, (255, 0, 0))
+        score_label_width = score_label_surface.get_width()
+        score_position = (score_label_position[0] +score_label_width + 20, score_label_position[1])
+        self.screen.blit(score_surface, score_position)
 
 
     def set_cell(self, position, shape_label):

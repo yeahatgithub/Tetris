@@ -25,7 +25,7 @@ def main():
     pygame.key.set_repeat(10, 100)  #一直按下某个键，每过100毫秒就引发一个KEYDOWN事件
 
     game_area = GameArea(screen)
-
+    # print(pygame.font.get_fonts())
     piece = create_piece(screen, game_area)
 
     game_timer = pygame.time.set_timer(pygame.USEREVENT, game_area.timer_interval)
@@ -83,7 +83,7 @@ def on_key_down(event, piece, game_area):
         piece.goto_bottom()
         piece = touch_bottom(game_area, piece)
 
-    print(game_area.score)
+    # print(game_area.score)
     return piece
 
 
@@ -102,8 +102,8 @@ def on_key_up(event, piece):
 def create_piece(screen, work_area):
     shape = random.randint(0, len(SHAPES) - 1)
     p = Piece(SHAPES[shape], screen, work_area)
-    global g_should_create_piece
-    g_should_create_piece = False
+    # global g_should_create_piece
+    # g_should_create_piece = False
     # print('create_piece()...')
     return p
 
