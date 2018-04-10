@@ -23,6 +23,7 @@ class GameArea():
             self.area.append(line[:])
         # self.desc()
         self.timer_interval = 1000   #1000ms
+        self.score = 0
 
     def desc(self):
         '''打印20*10的二维矩阵self.area的元素值。用于调试。'''
@@ -32,10 +33,10 @@ class GameArea():
 
     def draw(self):
         '''绘制游戏区域，即20*10的游戏区域'''
-        for r in range(21):
+        for r in range(LINE_NUM + 1):
             pygame.draw.line(self.screen, EDEG_COLOR, (WORK_AREA_LEFT, WORK_AREA_TOP + r * CELL_WIDTH),
                              (WORK_AREA_LEFT + WORK_AREA_WIDTH, WORK_AREA_TOP + r * CELL_WIDTH))
-        for c in range(11):
+        for c in range(COLUMN_NUM + 1):
             pygame.draw.line(self.screen, EDEG_COLOR, (WORK_AREA_LEFT + c * CELL_WIDTH, WORK_AREA_TOP),
                              (WORK_AREA_LEFT + c * CELL_WIDTH, WORK_AREA_TOP + WORK_AREA_HEIGHT))
 
@@ -62,5 +63,52 @@ class GameArea():
 
     def is_wall(self, r, c):
         return self.area[r][c] != BLANK_LABEL
+
+    def eliminate_lines(self):
+        '''消行。如果一行没有空白单元格，就消掉该行。返回得分。'''
+        '''
+        计分规则：
+        消掉1行：100分
+        消掉2行：200分
+        消掉3行：400分
+        消掉4行：800分
+        '''
+        lines_eliminated = []
+        for r in range(LINE_NUM):
+            if self.is_full(r):
+                lines_eliminated.append(r)
+
+        #刷新游戏区，消行
+        for r in lines_eliminated:
+            self.copy_down(r)
+            for c in range(COLUMN_NUM):
+                self.area[0][c] = BLANK_LABEL
+
+        eliminated_num = len(lines_eliminated)
+        assert(eliminated_num <= 4 and eliminated_num >= 0)
+        if eliminated_num < 3:
+            score = eliminated_num * 100
+        elif eliminated_num == 3:
+            score = 400
+        else:
+            score = 800
+        return score
+
+
+
+    def is_full(self, line_no):
+        '''line_no行满了吗'''
+        for c in range(COLUMN_NUM):
+            if self.area[line_no][c] == BLANK_LABEL:
+                return False
+
+        return True
+
+
+    def copy_down(self, line_no):
+        '''把line_no上面各行下沉一行。'''
+        for r in range(line_no, 0, -1):
+            for c in range(COLUMN_NUM):
+                self.area[r][c] = self.area[r - 1][c]
 
 

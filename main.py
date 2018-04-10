@@ -47,26 +47,26 @@ def main():
         pygame.display.flip()
 
 
-def check_events(piece, work_area):
+def check_events(piece, game_area):
     # 监视键盘和鼠标事件
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
         elif event.type == pygame.KEYDOWN:
-            piece = on_key_down(event, piece, work_area)
+            piece = on_key_down(event, piece, game_area)
         elif event.type == pygame.KEYUP:
             pass
             # on_key_up(event, piece)
         elif event.type == pygame.USEREVENT:
             reached_bottom = piece.move_down()
             if reached_bottom:
-                piece = create_piece(work_area.screen, work_area)
+                piece = touch_bottom(game_area, piece)
 
     return piece
 
 
 
-def on_key_down(event, piece, work_area):
+def on_key_down(event, piece, game_area):
     if event.key == pygame.K_RIGHT:
         # print("按下了右箭头")
         piece.move_right()
@@ -76,13 +76,20 @@ def on_key_down(event, piece, work_area):
     elif event.key == pygame.K_DOWN:
         reached_bottom = piece.move_down()
         if reached_bottom:
-            piece = create_piece(work_area.screen, work_area)
+            piece = touch_bottom(game_area, piece)
     elif event.key == pygame.K_UP:
         piece.turn_once()
     elif event.key == pygame.K_SPACE:
         piece.goto_bottom()
-        piece = create_piece(work_area.screen, work_area)
+        piece = touch_bottom(game_area, piece)
 
+    print(game_area.score)
+    return piece
+
+
+def touch_bottom(game_area, piece):
+    game_area.score += game_area.eliminate_lines()
+    piece = create_piece(game_area.screen, game_area)
     return piece
 
 
