@@ -46,7 +46,7 @@ class GameArea():
                 if self.area[r][c] != BLANK_LABEL:
                     self.draw_cell(c, r, PIECE_COLORS[self.area[r][c]])
 
-        self.draw_score_label()
+        self.draw_score()
 
     def draw_cell(self, x, y, color):
         '''第y行x列的格子里填充color颜色。一种方块对应一种颜色。'''
@@ -56,7 +56,8 @@ class GameArea():
         cell_rect = pygame.Rect(cell_position, cell_width_height)
         pygame.draw.rect(self.screen, color, cell_rect)
 
-    def draw_score_label(self):
+    def draw_score(self):
+        '''绘制游戏得分'''
         score_label_font = pygame.font.SysFont('simhei', 28)   #换成'arial'，无法显示中文。
 
         # 添加下画线
