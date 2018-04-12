@@ -84,9 +84,26 @@ class Piece():
             return True
 
     def turn_once(self):
-        self.turn += 1
-        if self.turn == len(self.shape_template):
-            self.turn = 0
+        turn = self.turn
+        turn += 1
+        if turn == len(self.shape_template):
+            turn = 0
+        if self.can_turn(self.shape_template[turn]):
+            self.turn = turn
+
+
+    def can_turn(self, shape_turn):
+        row_num = len(shape_turn)
+        col_num = len(shape_turn[0])
+        for r in range(row_num):
+            for c in range(col_num):
+                if shape_turn[r][c] == 'O' :
+                    # print("row:", r + self.y, "column:", c + self.x)
+                    if c + self.x < 0 or c + self.x >= COLUMN_NUM or r + self.y < 0 or r + self.y >= LINE_NUM:
+                        return False   #出界
+                    if self.game_area.is_wall(r + self.y, c + self.x):
+                        return False
+        return True
 
     def goto_bottom(self):
         '''直接坠落到底部'''
