@@ -79,7 +79,7 @@ def on_key_down(event, piece, game_area):
             piece = touch_bottom(game_area, piece)
     elif event.key == pygame.K_UP:
         piece.turn_once()
-    elif event.key == pygame.K_SPACE:
+    elif event.key == pygame.K_SPACE or event.key == pygame.K_d:
         piece.goto_bottom()
         piece = touch_bottom(game_area, piece)
 
