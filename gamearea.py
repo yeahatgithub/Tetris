@@ -47,6 +47,7 @@ class GameArea():
                     self.draw_cell(c, r, PIECE_COLORS[self.area[r][c]])
 
         self.draw_score()
+        self.draw_mannual()
 
     def draw_cell(self, x, y, color):
         '''第y行x列的格子里填充color颜色。一种方块对应一种颜色。'''
@@ -58,7 +59,7 @@ class GameArea():
 
     def draw_score(self):
         '''绘制游戏得分'''
-        score_label_font = pygame.font.SysFont('simhei', 28)   #换成'arial'，无法显示中文。
+        score_label_font = pygame.font.SysFont('stkaiti', 28)   #换成'arial'，无法显示中文。
 
         # 添加下画线
         score_label_font.set_underline(True)
@@ -72,6 +73,29 @@ class GameArea():
         score_position = (score_label_position[0] +score_label_width + 20, score_label_position[1])
         self.screen.blit(score_surface, score_position)
 
+    def draw_mannual(self):
+        base_position_x = WORK_AREA_LEFT + COLUMN_NUM * CELL_WIDTH + 40
+        base_position_y = WORK_AREA_TOP + 400
+        man_font = pygame.font.SysFont('stkaiti', 18)
+        title_surface = man_font.render(u'玩法：', False, HANZI_COLOR)
+        title_position = (base_position_x, base_position_y)
+        self.screen.blit(title_surface, title_position)
+
+        man_move_surface = man_font.render(u'左移：左方向键；右移：右方向键', False, HANZI_COLOR)
+        man_move_position = (base_position_x, base_position_y + 60)
+        self.screen.blit(man_move_surface, man_move_position)
+
+        man_down_surface = man_font.render(u'向下移动：下方向键', False, HANZI_COLOR)
+        man_down_position = (base_position_x, base_position_y + 120)
+        self.screen.blit(man_down_surface, man_down_position)
+
+        man_up_surface = man_font.render(u'翻转：上方向键', False, HANZI_COLOR)
+        man_up_position = (base_position_x, base_position_y + 180)
+        self.screen.blit(man_up_surface, man_up_position)
+
+        man_speed_surface = man_font.render(u'加速到底：空格键或d字母键', False, HANZI_COLOR)
+        man_speed_position = (base_position_x, base_position_y + 240)
+        self.screen.blit(man_speed_surface, man_speed_position)
 
     def set_cell(self, position, shape_label):
         '''把第r行c列的格子打上方块记号（如S, L...），因为该格子被此方块占据。'''
