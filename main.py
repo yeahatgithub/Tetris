@@ -28,17 +28,16 @@ def main():
     game_area = GameArea(screen)
     # print(pygame.font.get_fonts())
     game_state = GameState(screen, game_area)
-    piece = game_state.piece
+    # piece = game_state.piece
     game_timer = pygame.time.set_timer(pygame.USEREVENT, game_area.timer_interval)
     #游戏主循环
     while True:
         #事件处理
-        piece = check_events(piece, game_area, game_state)
+        check_events(game_area, game_state)
 
         #设定屏幕背景色.screen.fill()将刷新整个窗口。
         screen.fill(BG_COLOR)
         #绘制游戏区
-        # draw_workarea(screen)
         game_area.draw()
 
         if game_state.is_gameover:
@@ -46,50 +45,50 @@ def main():
             #print("game over!")
 
         #更新方块
-        piece.paint()
+        game_state.piece.paint()
 
         #让最近绘制的屏幕可见
         pygame.display.flip()
 
 
-def check_events(piece, game_area, game_state):
+def check_events(game_area, game_state):
     # 监视键盘和鼠标事件
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
         elif event.type == pygame.KEYDOWN:
-            piece = on_key_down(event, piece, game_area, game_state)
+            on_key_down(event, game_area, game_state)
         elif event.type == pygame.KEYUP:
             pass
             # on_key_up(event, piece)
         elif event.type == pygame.USEREVENT:
-            reached_bottom = piece.move_down()
+            reached_bottom = game_state.piece.move_down()
             if reached_bottom:
-                piece = touch_bottom(game_area, game_state)
+                touch_bottom(game_area, game_state)
 
-    return piece
+    #return game_state.piece
 
 
 
-def on_key_down(event, piece, game_area, game_state):
+def on_key_down(event, game_area, game_state):
     if event.key == pygame.K_RIGHT:
         # print("按下了右箭头")
-        piece.move_right()
+        game_state.piece.move_right()
     elif event.key == pygame.K_LEFT:
         # print("按下了左箭头")
-        piece.move_left()
+        game_state.piece.move_left()
     elif event.key == pygame.K_DOWN:
-        reached_bottom = piece.move_down()
+        reached_bottom = game_state.piece.move_down()
         if reached_bottom:
-            piece = touch_bottom(game_area, game_state)
+            game_state.piece = touch_bottom(game_area, game_state)
     elif event.key == pygame.K_UP:
-        piece.turn_once()
+        game_state.piece.turn_once()
     elif event.key == pygame.K_SPACE or event.key == pygame.K_d:
-        piece.goto_bottom()
-        piece = touch_bottom(game_area, game_state)
+        game_state.piece.goto_bottom()
+        touch_bottom(game_area, game_state)
 
     # print(game_area.score)
-    return piece
+    # return piece
 
 
 def touch_bottom(game_area, game_state):
@@ -102,7 +101,7 @@ def touch_bottom(game_area, game_state):
             game_state.gameover()
     game_state.new_piece()
     # print("game_state.piece:", game_state.piece)
-    return game_state.piece
+    # return game_state.piece
 
 
 def on_key_up(event, piece):
