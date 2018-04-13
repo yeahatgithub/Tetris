@@ -38,7 +38,7 @@ def main():
         #设定屏幕背景色.screen.fill()将刷新整个窗口。
         screen.fill(BG_COLOR)
         #绘制游戏区
-        game_area.draw()
+        game_area.draw(game_state.score)
 
         if game_state.is_gameover:
             game_area.draw_gameover()   #游戏结束！
@@ -93,7 +93,7 @@ def on_key_down(event, game_area, game_state):
 
 def touch_bottom(game_area, game_state):
     '''方块落到底部时，要消行，要生成新方块。如果触到顶部，游戏终止。'''
-    game_area.score += game_area.eliminate_lines()
+    game_state.add_score(game_area.eliminate_lines())
     for c in range(COLUMN_NUM):
         if game_area.is_wall(0, c):
             #game_area.draw_gameover()   #在这里绘制文字是不起作用的。必须放到主循环中。

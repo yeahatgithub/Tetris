@@ -13,6 +13,7 @@ class GameState():
         self.screen = screen
         self.game_area = game_area
         self.piece = self.new_piece()
+        self.score = 0
 
     def gameover(self):
         self.is_gameover = True
@@ -24,3 +25,20 @@ class GameState():
         shape = random.randint(0, len(SHAPES) - 1)
         self.piece = Piece(SHAPES[shape], self.screen, self.game_area)
         return self.piece
+
+    def add_score(self, eliminated_line_num):
+        '''消行计分'''
+        '''
+        计分规则：
+        消掉1行：100分
+        消掉2行：200分
+        消掉3行：400分
+        消掉4行：800分
+        '''
+        assert(eliminated_line_num <= 4 and eliminated_line_num >= 0)
+        if eliminated_line_num < 3:
+            self.score += eliminated_line_num * 100
+        elif eliminated_line_num == 3:
+            self.score += 400
+        else:
+            self.score += 800

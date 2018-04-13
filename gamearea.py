@@ -23,7 +23,7 @@ class GameArea():
             self.area.append(line[:])
         # self.desc()
         self.timer_interval = 1000   #1000ms
-        self.score = 0
+        #self.score = 0
 
     def desc(self):
         '''打印20*10的二维矩阵self.area的元素值。用于调试。'''
@@ -31,7 +31,7 @@ class GameArea():
         for line in self.area:
             print(line)
 
-    def draw(self):
+    def draw(self, score):
         '''绘制游戏区域，即20*10的游戏区域'''
         for r in range(LINE_NUM + 1):
             pygame.draw.line(self.screen, EDEG_COLOR, (GAME_AREA_LEFT, GAME_AREA_TOP + r * CELL_WIDTH),
@@ -46,7 +46,7 @@ class GameArea():
                 if self.area[r][c] != BLANK_LABEL:
                     self.draw_cell(c, r, PIECE_COLORS[self.area[r][c]])
 
-        self.draw_score()
+        self.draw_score(score)
         self.draw_mannual()
 
     def draw_cell(self, x, y, color):
@@ -57,7 +57,7 @@ class GameArea():
         cell_rect = pygame.Rect(cell_position, cell_width_height)
         pygame.draw.rect(self.screen, color, cell_rect)
 
-    def draw_score(self):
+    def draw_score(self, score):
         '''绘制游戏得分'''
         score_label_font = pygame.font.SysFont('stkaiti', 28)   #换成'arial'，无法显示中文。
 
@@ -68,7 +68,7 @@ class GameArea():
         self.screen.blit(score_label_surface, score_label_position)
 
         score_font = pygame.font.SysFont('arial', 36)
-        score_surface = score_font.render(str(self.score), False, (255, 0, 0))
+        score_surface = score_font.render(str(score), False, (255, 0, 0))
         score_label_width = score_label_surface.get_width()
         score_position = (score_label_position[0] +score_label_width + 20, score_label_position[1])
         self.screen.blit(score_surface, score_position)
@@ -115,13 +115,6 @@ class GameArea():
 
     def eliminate_lines(self):
         '''消行。如果一行没有空白单元格，就消掉该行。返回得分。'''
-        '''
-        计分规则：
-        消掉1行：100分
-        消掉2行：200分
-        消掉3行：400分
-        消掉4行：800分
-        '''
         lines_eliminated = []
         for r in range(LINE_NUM):
             if self.is_full(r):
@@ -133,16 +126,7 @@ class GameArea():
             for c in range(COLUMN_NUM):
                 self.area[0][c] = BLANK_LABEL
 
-        eliminated_num = len(lines_eliminated)
-        assert(eliminated_num <= 4 and eliminated_num >= 0)
-        if eliminated_num < 3:
-            score = eliminated_num * 100
-        elif eliminated_num == 3:
-            score = 400
-        else:
-            score = 800
-        return score
-
+        return len(lines_eliminated)
 
 
     def is_full(self, line_no):
