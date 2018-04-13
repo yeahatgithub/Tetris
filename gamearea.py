@@ -88,20 +88,17 @@ class GameArea():
         title_position = (base_position_x, base_position_y)
         self.screen.blit(title_surface, title_position)
 
-        man_move_surface = man_font.render(u'左移：左方向键；右移：右方向键', False, HANZI_COLOR)
-        man_move_position = (base_position_x, base_position_y + 60)
-        self.screen.blit(man_move_surface, man_move_position)
-
-        man_down_surface = man_font.render(u'向下移动：下方向键', False, HANZI_COLOR)
-        man_down_position = (base_position_x, base_position_y + 120)
+        man_down_surface = man_font.render(u'翻转：上方向键；下移：下方向键', False, HANZI_COLOR)
+        man_down_position = (base_position_x, base_position_y + 60)
         self.screen.blit(man_down_surface, man_down_position)
 
-        man_up_surface = man_font.render(u'翻转：上方向键', False, HANZI_COLOR)
-        man_up_position = (base_position_x, base_position_y + 180)
-        self.screen.blit(man_up_surface, man_up_position)
+        man_move_surface = man_font.render(u'左移：左方向键；右移：右方向键', False, HANZI_COLOR)
+        man_move_position = (base_position_x, base_position_y + 120)
+        self.screen.blit(man_move_surface, man_move_position)
 
-        man_speed_surface = man_font.render(u'加速到底：空格键或d字母键', False, HANZI_COLOR)
-        man_speed_position = (base_position_x, base_position_y + 240)
+
+        man_speed_surface = man_font.render(u'快速到底：空格键或d字母键', False, HANZI_COLOR)
+        man_speed_position = (base_position_x, base_position_y + 180)
         self.screen.blit(man_speed_surface, man_speed_position)
 
     def set_cell(self, position, shape_label):

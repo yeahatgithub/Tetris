@@ -20,15 +20,14 @@ def draw_workarea(screen):
 def main():
     #初始化pygame
     pygame.init()
+    # print(pygame.font.get_fonts())
     #创建屏幕对象
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption("俄罗斯方块")
     pygame.key.set_repeat(10, 100)  #一直按下某个键，每过100毫秒就引发一个KEYDOWN事件
 
     game_area = GameArea(screen)
-    # print(pygame.font.get_fonts())
     game_state = GameState(screen, game_area)
-    # piece = game_state.piece
     game_timer = pygame.time.set_timer(pygame.USEREVENT, game_area.timer_interval)
     #游戏主循环
     while True:
@@ -56,18 +55,12 @@ def check_events(game_area, game_state):
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
-        elif event.type == pygame.KEYDOWN:
+        elif event.type == pygame.KEYDOWN and not game_state.is_gameover:
             on_key_down(event, game_area, game_state)
-        elif event.type == pygame.KEYUP:
-            pass
-            # on_key_up(event, piece)
-        elif event.type == pygame.USEREVENT:
+        elif event.type == pygame.USEREVENT and not game_state.is_gameover:
             reached_bottom = game_state.piece.move_down()
             if reached_bottom:
                 touch_bottom(game_area, game_state)
-
-    #return game_state.piece
-
 
 
 def on_key_down(event, game_area, game_state):
@@ -87,10 +80,6 @@ def on_key_down(event, game_area, game_state):
         game_state.piece.goto_bottom()
         touch_bottom(game_area, game_state)
 
-    # print(game_area.score)
-    # return piece
-
-
 def touch_bottom(game_area, game_state):
     '''方块落到底部时，要消行，要生成新方块。如果触到顶部，游戏终止。'''
     game_state.add_score(game_area.eliminate_lines())
@@ -99,16 +88,10 @@ def touch_bottom(game_area, game_state):
             #game_area.draw_gameover()   #在这里绘制文字是不起作用的。必须放到主循环中。
             #print("game over!")
             game_state.gameover()
-    game_state.new_piece()
-    # print("game_state.piece:", game_state.piece)
-    # return game_state.piece
+            break
+    if not game_state.is_gameover:
+        game_state.new_piece()
 
-
-def on_key_up(event, piece):
-    if event.key == pygame.K_RIGHT:
-        print("松开了右箭头")
-    elif event.key == pygame.K_LEFT:
-        print("松开了左箭头")
 
 if __name__ == '__main__':
     main()
