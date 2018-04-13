@@ -5,15 +5,16 @@ import pygame
 from settings import *
 from pieces import Piece
 from gamearea import GameArea
+from gamestate import GameState
 
 def draw_workarea(screen):
     '''绘制游戏区域，即10X20的表格区域'''
     for r in range(21):
-        pygame.draw.line(screen, EDEG_COLOR, (WORK_AREA_LEFT, WORK_AREA_TOP + r * CELL_WIDTH),
-                         (WORK_AREA_LEFT + WORK_AREA_WIDTH, WORK_AREA_TOP + r * CELL_WIDTH))
+        pygame.draw.line(screen, EDEG_COLOR, (GAME_AREA_LEFT, GAME_AREA_TOP + r * CELL_WIDTH),
+                         (GAME_AREA_LEFT + GAME_AREA_WIDTH, GAME_AREA_TOP + r * CELL_WIDTH))
     for c in range(11):
-        pygame.draw.line(screen, EDEG_COLOR, (WORK_AREA_LEFT + c * CELL_WIDTH, WORK_AREA_TOP),
-                         (WORK_AREA_LEFT + c * CELL_WIDTH, WORK_AREA_TOP + WORK_AREA_HEIGHT))
+        pygame.draw.line(screen, EDEG_COLOR, (GAME_AREA_LEFT + c * CELL_WIDTH, GAME_AREA_TOP),
+                         (GAME_AREA_LEFT + c * CELL_WIDTH, GAME_AREA_TOP + GAME_AREA_HEIGHT))
 
 
 def main():
@@ -26,19 +27,23 @@ def main():
 
     game_area = GameArea(screen)
     # print(pygame.font.get_fonts())
-    piece = create_piece(screen, game_area)
-
+    game_state = GameState(screen, game_area)
+    piece = game_state.piece
     game_timer = pygame.time.set_timer(pygame.USEREVENT, game_area.timer_interval)
     #游戏主循环
     while True:
         #事件处理
-        piece = check_events(piece, game_area)
+        piece = check_events(piece, game_area, game_state)
 
         #设定屏幕背景色.screen.fill()将刷新整个窗口。
         screen.fill(BG_COLOR)
         #绘制游戏区
         # draw_workarea(screen)
         game_area.draw()
+
+        if game_state.is_gameover:
+            game_area.draw_gameover()   #游戏结束！
+            #print("game over!")
 
         #更新方块
         piece.paint()
@@ -47,26 +52,26 @@ def main():
         pygame.display.flip()
 
 
-def check_events(piece, game_area):
+def check_events(piece, game_area, game_state):
     # 监视键盘和鼠标事件
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
         elif event.type == pygame.KEYDOWN:
-            piece = on_key_down(event, piece, game_area)
+            piece = on_key_down(event, piece, game_area, game_state)
         elif event.type == pygame.KEYUP:
             pass
             # on_key_up(event, piece)
         elif event.type == pygame.USEREVENT:
             reached_bottom = piece.move_down()
             if reached_bottom:
-                piece = touch_bottom(game_area, piece)
+                piece = touch_bottom(game_area, game_state)
 
     return piece
 
 
 
-def on_key_down(event, piece, game_area):
+def on_key_down(event, piece, game_area, game_state):
     if event.key == pygame.K_RIGHT:
         # print("按下了右箭头")
         piece.move_right()
@@ -76,21 +81,28 @@ def on_key_down(event, piece, game_area):
     elif event.key == pygame.K_DOWN:
         reached_bottom = piece.move_down()
         if reached_bottom:
-            piece = touch_bottom(game_area, piece)
+            piece = touch_bottom(game_area, game_state)
     elif event.key == pygame.K_UP:
         piece.turn_once()
     elif event.key == pygame.K_SPACE or event.key == pygame.K_d:
         piece.goto_bottom()
-        piece = touch_bottom(game_area, piece)
+        piece = touch_bottom(game_area, game_state)
 
     # print(game_area.score)
     return piece
 
 
-def touch_bottom(game_area, piece):
+def touch_bottom(game_area, game_state):
+    '''方块落到底部时，要消行，要生成新方块。如果触到顶部，游戏终止。'''
     game_area.score += game_area.eliminate_lines()
-    piece = create_piece(game_area.screen, game_area)
-    return piece
+    for c in range(COLUMN_NUM):
+        if game_area.is_wall(0, c):
+            #game_area.draw_gameover()   #在这里绘制文字是不起作用的。必须放到主循环中。
+            #print("game over!")
+            game_state.gameover()
+    game_state.new_piece()
+    # print("game_state.piece:", game_state.piece)
+    return game_state.piece
 
 
 def on_key_up(event, piece):
@@ -98,15 +110,6 @@ def on_key_up(event, piece):
         print("松开了右箭头")
     elif event.key == pygame.K_LEFT:
         print("松开了左箭头")
-
-def create_piece(screen, work_area):
-    shape = random.randint(0, len(SHAPES) - 1)
-    p = Piece(SHAPES[shape], screen, work_area)
-    # global g_should_create_piece
-    # g_should_create_piece = False
-    # print('create_piece()...')
-    return p
-
 
 if __name__ == '__main__':
     main()

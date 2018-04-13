@@ -34,11 +34,11 @@ class GameArea():
     def draw(self):
         '''绘制游戏区域，即20*10的游戏区域'''
         for r in range(LINE_NUM + 1):
-            pygame.draw.line(self.screen, EDEG_COLOR, (WORK_AREA_LEFT, WORK_AREA_TOP + r * CELL_WIDTH),
-                             (WORK_AREA_LEFT + WORK_AREA_WIDTH, WORK_AREA_TOP + r * CELL_WIDTH))
+            pygame.draw.line(self.screen, EDEG_COLOR, (GAME_AREA_LEFT, GAME_AREA_TOP + r * CELL_WIDTH),
+                             (GAME_AREA_LEFT + GAME_AREA_WIDTH, GAME_AREA_TOP + r * CELL_WIDTH))
         for c in range(COLUMN_NUM + 1):
-            pygame.draw.line(self.screen, EDEG_COLOR, (WORK_AREA_LEFT + c * CELL_WIDTH, WORK_AREA_TOP),
-                             (WORK_AREA_LEFT + c * CELL_WIDTH, WORK_AREA_TOP + WORK_AREA_HEIGHT))
+            pygame.draw.line(self.screen, EDEG_COLOR, (GAME_AREA_LEFT + c * CELL_WIDTH, GAME_AREA_TOP),
+                             (GAME_AREA_LEFT + c * CELL_WIDTH, GAME_AREA_TOP + GAME_AREA_HEIGHT))
 
         #绘制未消掉方块组成的“墙”。
         for r in range(LINE_NUM):
@@ -51,8 +51,8 @@ class GameArea():
 
     def draw_cell(self, x, y, color):
         '''第y行x列的格子里填充color颜色。一种方块对应一种颜色。'''
-        cell_position = (x * CELL_WIDTH + WORK_AREA_LEFT + 1,
-                         y * CELL_WIDTH + WORK_AREA_TOP + 1)
+        cell_position = (x * CELL_WIDTH + GAME_AREA_LEFT + 1,
+                         y * CELL_WIDTH + GAME_AREA_TOP + 1)
         cell_width_height = (CELL_WIDTH - 2, CELL_WIDTH - 2)
         cell_rect = pygame.Rect(cell_position, cell_width_height)
         pygame.draw.rect(self.screen, color, cell_rect)
@@ -64,7 +64,7 @@ class GameArea():
         # 添加下画线
         score_label_font.set_underline(True)
         score_label_surface = score_label_font.render(u'得分：', False, SCORE_LABEL_COLOR)
-        score_label_position = (WORK_AREA_LEFT + COLUMN_NUM * CELL_WIDTH + 40, WORK_AREA_TOP)
+        score_label_position = (GAME_AREA_LEFT + COLUMN_NUM * CELL_WIDTH + 40, GAME_AREA_TOP)
         self.screen.blit(score_label_surface, score_label_position)
 
         score_font = pygame.font.SysFont('arial', 36)
@@ -73,9 +73,16 @@ class GameArea():
         score_position = (score_label_position[0] +score_label_width + 20, score_label_position[1])
         self.screen.blit(score_surface, score_position)
 
+    def draw_gameover(self):
+        '''显示游戏结束'''
+        gameover_font = pygame.font.SysFont('stkaiti', 36)
+        gameover_surface = gameover_font.render(u'游戏结束', False, GAMEOVER_COLOR)
+        gameover_position = (GAME_AREA_LEFT + 150, GAME_AREA_TOP + 400)
+        self.screen.blit(gameover_surface, gameover_position)
+
     def draw_mannual(self):
-        base_position_x = WORK_AREA_LEFT + COLUMN_NUM * CELL_WIDTH + 40
-        base_position_y = WORK_AREA_TOP + 400
+        base_position_x = GAME_AREA_LEFT + COLUMN_NUM * CELL_WIDTH + 40
+        base_position_y = GAME_AREA_TOP + 400
         man_font = pygame.font.SysFont('stkaiti', 18)
         title_surface = man_font.render(u'玩法：', False, HANZI_COLOR)
         title_position = (base_position_x, base_position_y)
