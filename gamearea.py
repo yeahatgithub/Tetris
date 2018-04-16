@@ -22,7 +22,6 @@ class GameArea():
         for i in range(LINE_NUM):
             self.area.append(line[:])
         # self.desc()
-        self.timer_interval = 1000   #1000ms
         #self.score = 0
 
     def desc(self):

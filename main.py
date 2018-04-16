@@ -26,13 +26,12 @@ def main():
     pygame.display.set_caption("俄罗斯方块")
     pygame.key.set_repeat(10, 100)  #一直按下某个键，每过100毫秒就引发一个KEYDOWN事件
 
-    game_area = GameArea(screen)
-    game_state = GameState(screen, game_area)
-    game_timer = pygame.time.set_timer(pygame.USEREVENT, game_area.timer_interval)
+    game_area, game_state = prepare_game(screen)
+
     #游戏主循环
     while True:
         #事件处理
-        check_events(game_area, game_state)
+        game_area, game_state = check_events(game_area, game_state)
 
         #设定屏幕背景色.screen.fill()将刷新整个窗口。
         screen.fill(BG_COLOR)
@@ -49,19 +48,29 @@ def main():
         #让最近绘制的屏幕可见
         pygame.display.flip()
 
+def prepare_game(screen):
+    game_area = GameArea(screen)
+    game_state = GameState(screen, game_area)
+    return game_area, game_state
+
+def start_game(screen):
+    game_area, game_state = prepare_game(screen)
+    game_state.restart_game()
+    return game_area, game_state
+
 
 def check_events(game_area, game_state):
     # 监视键盘和鼠标事件
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
-        elif event.type == pygame.KEYDOWN and not game_state.is_gameover:
-            on_key_down(event, game_area, game_state)
+        elif event.type == pygame.KEYDOWN:
+            game_area, game_state = on_key_down(event, game_area, game_state)
         elif event.type == pygame.USEREVENT and not game_state.is_gameover:
             reached_bottom = game_state.piece.move_down()
             if reached_bottom:
                 touch_bottom(game_area, game_state)
-
+    return game_area, game_state
 
 def on_key_down(event, game_area, game_state):
     if event.key == pygame.K_RIGHT:
@@ -79,6 +88,10 @@ def on_key_down(event, game_area, game_state):
     elif event.key == pygame.K_SPACE or event.key == pygame.K_d:
         game_state.piece.goto_bottom()
         touch_bottom(game_area, game_state)
+    elif event.key == pygame.K_s and game_state.is_gameover:
+        game_area, game_state = start_game(game_area.screen)
+
+    return game_area, game_state
 
 def touch_bottom(game_area, game_state):
     '''方块落到底部时，要消行，要生成新方块。如果触到顶部，游戏终止。'''
