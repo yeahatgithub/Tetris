@@ -30,7 +30,7 @@ class GameArea():
         for line in self.area:
             print(line)
 
-    def draw(self, score):
+    def draw(self, score, is_gameover, session_count):
         '''绘制游戏区域，即20*10的游戏区域'''
         for r in range(LINE_NUM + 1):
             pygame.draw.line(self.screen, EDEG_COLOR, (GAME_AREA_LEFT, GAME_AREA_TOP + r * CELL_WIDTH),
@@ -47,6 +47,8 @@ class GameArea():
 
         self.draw_score(score)
         self.draw_mannual()
+        if is_gameover:
+            self.draw_gameover(session_count)   #游戏结束！
 
     def draw_cell(self, x, y, color):
         '''第y行x列的格子里填充color颜色。一种方块对应一种颜色。'''
@@ -72,12 +74,18 @@ class GameArea():
         score_position = (score_label_position[0] +score_label_width + 20, score_label_position[1])
         self.screen.blit(score_surface, score_position)
 
-    def draw_gameover(self):
+    def draw_gameover(self, session_count):
         '''显示游戏结束'''
         gameover_font = pygame.font.SysFont('stkaiti', 36)
         gameover_surface = gameover_font.render(u'游戏结束', False, GAMEOVER_COLOR)
-        gameover_position = (GAME_AREA_LEFT + 150, GAME_AREA_TOP + 400)
-        self.screen.blit(gameover_surface, gameover_position)
+        gameover_position = (GAME_AREA_LEFT + 4 * CELL_WIDTH - CELL_WIDTH // 2, GAME_AREA_TOP + 10 * CELL_WIDTH)
+
+        start_tip_surface = gameover_font.render(u'按s键开始新游戏', False, GAMEOVER_COLOR)
+        start_tip_position = (GAME_AREA_LEFT + 2 * CELL_WIDTH, GAME_AREA_TOP + 11 * CELL_WIDTH)
+        if session_count > 0:
+            self.screen.blit(gameover_surface, gameover_position)
+        self.screen.blit(start_tip_surface, start_tip_position)
+
 
     def draw_mannual(self):
         base_position_x = GAME_AREA_LEFT + COLUMN_NUM * CELL_WIDTH + 40

@@ -16,6 +16,7 @@ class GameState():
         self.piece = self.new_piece()
         self.score = 0
         self.timer_interval = 1000   #1000ms
+        self.session_count = 0   #玩第几轮？
 
     def gameover(self):
         self.is_gameover = True
@@ -23,6 +24,7 @@ class GameState():
     def restart_game(self):
         self.is_gameover = False
         self.game_timer = pygame.time.set_timer(pygame.USEREVENT, self.timer_interval)
+        self.session_count += 1
 
     def new_piece(self):
         shape = random.randint(0, len(SHAPES) - 1)

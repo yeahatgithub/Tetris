@@ -36,11 +36,7 @@ def main():
         #设定屏幕背景色.screen.fill()将刷新整个窗口。
         screen.fill(BG_COLOR)
         #绘制游戏区
-        game_area.draw(game_state.score)
-
-        if game_state.is_gameover:
-            game_area.draw_gameover()   #游戏结束！
-            #print("game over!")
+        game_area.draw(game_state.score, game_state.is_gameover, game_state.session_count)
 
         #更新方块
         game_state.piece.paint()
