@@ -6,18 +6,20 @@
 import random
 from settings import *
 from pieces import Piece
+from gamewall import GameWall
 import pygame
 class GameState():
-    def __init__(self, screen, game_area):
+    def __init__(self, screen):
         #self.score = 0
         self.is_gameover = True   #按s键开始游戏
         self.is_paused = False
         self.screen = screen
-        self.game_area = game_area
+        self.wall = GameWall(screen)
         self.piece = self.new_piece()
         self.score = 0
         self.timer_interval = 1000   #1000ms
         self.session_count = 0   #玩第几轮？
+
 
     def gameover(self):
         self.is_gameover = True
@@ -43,7 +45,7 @@ class GameState():
 
     def new_piece(self):
         shape = random.randint(0, len(SHAPES) - 1)
-        self.piece = Piece(SHAPES[shape], self.screen, self.game_area)
+        self.piece = Piece(SHAPES[shape], self.screen, self.wall)
         return self.piece
 
     def add_score(self, eliminated_line_num):
@@ -62,3 +64,15 @@ class GameState():
             self.score += 400
         else:
             self.score += 800
+
+    def touch_bottom(self):
+        '''方块落到底部时，要消行，要生成新方块。如果触到顶部，游戏终止。'''
+        self.add_score(self.wall.eliminate_lines())
+        for c in range(COLUMN_NUM):
+            if self.wall.is_wall(0, c):
+                # game_area.draw_gameover()   #在这里绘制文字是不起作用的。必须放到主循环中。
+                # print("game over!")
+                self.gameover()
+                break
+        if not self.is_gameover:
+            self.new_piece()

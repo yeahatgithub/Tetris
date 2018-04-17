@@ -4,19 +4,9 @@ import pygame
 #各种配置
 from settings import *
 # from pieces import Piece
-from gamearea import GameArea
+# from gamewall import GameWall
 from gamestate import GameState
 from game_display import GameDisplay
-
-def draw_workarea(screen):
-    '''绘制游戏区域，即10X20的表格区域'''
-    for r in range(21):
-        pygame.draw.line(screen, EDEG_COLOR, (GAME_AREA_LEFT, GAME_AREA_TOP + r * CELL_WIDTH),
-                         (GAME_AREA_LEFT + GAME_AREA_WIDTH, GAME_AREA_TOP + r * CELL_WIDTH))
-    for c in range(11):
-        pygame.draw.line(screen, EDEG_COLOR, (GAME_AREA_LEFT + c * CELL_WIDTH, GAME_AREA_TOP),
-                         (GAME_AREA_LEFT + c * CELL_WIDTH, GAME_AREA_TOP + GAME_AREA_HEIGHT))
-
 
 def main():
     #初始化pygame
@@ -27,17 +17,17 @@ def main():
     pygame.display.set_caption("俄罗斯方块")
     pygame.key.set_repeat(10, 100)  #一直按下某个键，每过100毫秒就引发一个KEYDOWN事件
 
-    game_area, game_state = prepare_game(screen)
+    game_state = prepare_game(screen)
 
     #游戏主循环
     while True:
         #事件处理
-        game_area, game_state = check_events(game_area, game_state)
+        game_state = check_events(game_state)
 
         #设定屏幕背景色.screen.fill()将刷新整个窗口。
         screen.fill(BG_COLOR)
         #绘制游戏区
-        GameDisplay.draw(screen, game_area, game_state)
+        GameDisplay.draw(screen, game_state)
 
         #更新方块
         game_state.piece.paint()
@@ -46,30 +36,29 @@ def main():
         pygame.display.flip()
 
 def prepare_game(screen):
-    game_area = GameArea(screen)
-    game_state = GameState(screen, game_area)
-    return game_area, game_state
+    game_state = GameState(screen)
+    return game_state
 
 def start_game(screen):
-    game_area, game_state = prepare_game(screen)
+    game_state = prepare_game(screen)
     game_state.restart_game()
-    return game_area, game_state
+    return  game_state
 
 
-def check_events(game_area, game_state):
+def check_events(game_state):
     # 监视键盘和鼠标事件
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
         elif event.type == pygame.KEYDOWN:
-            game_area, game_state = on_key_down(event, game_area, game_state)
+            game_state = on_key_down(event, game_state)
         elif event.type == pygame.USEREVENT and not game_state.is_gameover:
             reached_bottom = game_state.piece.move_down()
             if reached_bottom:
-                touch_bottom(game_area, game_state)
-    return game_area, game_state
+                game_state.touch_bottom()
+    return  game_state
 
-def on_key_down(event, game_area, game_state):
+def on_key_down(event, game_state):
     if not game_state.is_paused and event.key == pygame.K_RIGHT:
         # print("按下了右箭头")
         game_state.piece.move_right()
@@ -79,33 +68,21 @@ def on_key_down(event, game_area, game_state):
     elif not game_state.is_paused and event.key == pygame.K_DOWN:
         reached_bottom = game_state.piece.move_down()
         if reached_bottom:
-            game_state.piece = touch_bottom(game_area, game_state)
+            game_state.piece = game_state.touch_bottom()
     elif not game_state.is_paused and event.key == pygame.K_UP:
         game_state.piece.turn_once()
     elif not game_state.is_paused and (event.key == pygame.K_SPACE or event.key == pygame.K_d):
         game_state.piece.goto_bottom()
-        touch_bottom(game_area, game_state)
+        game_state.touch_bottom()
     elif event.key == pygame.K_s and game_state.is_gameover:
-        game_area, game_state = start_game(game_area.screen)
+        game_state = start_game(game_state.screen)
     elif event.key == pygame.K_p:
         if game_state.is_paused:
             game_state.resume_game()
         elif not game_state.is_gameover:
             game_state.pause_game()
 
-    return game_area, game_state
-
-def touch_bottom(game_area, game_state):
-    '''方块落到底部时，要消行，要生成新方块。如果触到顶部，游戏终止。'''
-    game_state.add_score(game_area.eliminate_lines())
-    for c in range(COLUMN_NUM):
-        if game_area.is_wall(0, c):
-            #game_area.draw_gameover()   #在这里绘制文字是不起作用的。必须放到主循环中。
-            #print("game over!")
-            game_state.gameover()
-            break
-    if not game_state.is_gameover:
-        game_state.new_piece()
+    return game_state
 
 
 if __name__ == '__main__':

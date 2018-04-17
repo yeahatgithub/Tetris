@@ -2,7 +2,7 @@
 # @Author  : freedomyeah
 # @Email   : iamdouble@163.com
 # @Copyright:  MIT
-import pygame
+# import pygame
 from settings import *
 
 
@@ -12,7 +12,7 @@ from settings import *
 此后，随着方块落到底部，一个单元格可能填充'SZJLOIT'等字母，表明该单元格曾被相应形状的方块占据。
 '''
 
-class GameArea():
+class GameWall():
     '''游戏区类。记住落到底部，且未被消掉的方块组成的“墙”。'''
     def __init__(self, screen):
         '''游戏开始时，游戏区20*10个格子被'-'符号填充。“墙”是空的。'''

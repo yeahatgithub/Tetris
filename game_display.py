@@ -10,7 +10,7 @@ class GameDisplay():
     '''主程序的工具类。是绘制操作的集散地。'''
 
     @staticmethod
-    def draw(screen, game_area, game_state):
+    def draw(screen, game_state):
         '''绘制游戏区域，即20*10的游戏区域'''
         for r in range(LINE_NUM + 1):
             pygame.draw.line(screen, EDEG_COLOR, (GAME_AREA_LEFT, GAME_AREA_TOP + r * CELL_WIDTH),
@@ -22,8 +22,8 @@ class GameDisplay():
         # 绘制未消掉方块组成的“墙”。
         for r in range(LINE_NUM):
             for c in range(COLUMN_NUM):
-                if game_area.area[r][c] != BLANK_LABEL:
-                    GameDisplay.draw_cell(screen, c, r, PIECE_COLORS[game_area.area[r][c]])
+                if game_state.wall.area[r][c] != BLANK_LABEL:
+                    GameDisplay.draw_cell(screen, c, r, PIECE_COLORS[game_state.wall.area[r][c]])
 
         GameDisplay.draw_score(screen, game_state.score)
         GameDisplay.draw_mannual(screen)
