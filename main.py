@@ -3,9 +3,10 @@ import random
 import pygame
 #各种配置
 from settings import *
-from pieces import Piece
+# from pieces import Piece
 from gamearea import GameArea
 from gamestate import GameState
+from game_display import GameDisplay
 
 def draw_workarea(screen):
     '''绘制游戏区域，即10X20的表格区域'''
@@ -36,7 +37,7 @@ def main():
         #设定屏幕背景色.screen.fill()将刷新整个窗口。
         screen.fill(BG_COLOR)
         #绘制游戏区
-        game_area.draw(game_state.score, game_state.is_gameover, game_state.session_count, game_state.is_paused)
+        GameDisplay.draw(screen, game_area, game_state)
 
         #更新方块
         game_state.piece.paint()

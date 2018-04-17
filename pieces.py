@@ -6,18 +6,17 @@ import pygame
 #shape是方块代号，用作PIECES字典的键。
 #turn是方块的翻转次数，决定方块的角度
 #screen是窗口对象
-from gamearea import *
-
+from game_display import GameDisplay
 
 class Piece():
-    def __init__(self, shape, screen, word_area):
+    def __init__(self, shape, screen, game_area):
         self.x = 3
         self.y = 0
         self.shape = shape
         self.shape_template = PIECES[shape]
         self.turn = 0   #未翻转
         self.screen = screen
-        self.game_area = word_area
+        self.game_area = game_area
 
     def paint(self):
         shape_turn = self.shape_template[self.turn]
@@ -28,7 +27,7 @@ class Piece():
                     self.draw_cell(self.x + c, self.y + r)
 
     def draw_cell(self, x, y):
-        self.game_area.draw_cell(x, y, PIECE_COLORS[self.shape])
+        GameDisplay.draw_cell(self.screen, x, y, PIECE_COLORS[self.shape])
 
     def can_move_right(self):
         '''判断能否向右移动方块'''
