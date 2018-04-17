@@ -55,14 +55,6 @@ def start_game(screen):
     return game_area, game_state
 
 
-def pause_game(game_area, game_state):
-    '''暂停游戏'''
-    game_state.pause_game()
-    # game_area.draw_pause()
-
-    return game_area, game_state
-
-
 def check_events(game_area, game_state):
     # 监视键盘和鼠标事件
     for event in pygame.event.get():
@@ -77,19 +69,19 @@ def check_events(game_area, game_state):
     return game_area, game_state
 
 def on_key_down(event, game_area, game_state):
-    if event.key == pygame.K_RIGHT:
+    if not game_state.is_paused and event.key == pygame.K_RIGHT:
         # print("按下了右箭头")
         game_state.piece.move_right()
-    elif event.key == pygame.K_LEFT:
+    elif not game_state.is_paused and event.key == pygame.K_LEFT:
         # print("按下了左箭头")
         game_state.piece.move_left()
-    elif event.key == pygame.K_DOWN:
+    elif not game_state.is_paused and event.key == pygame.K_DOWN:
         reached_bottom = game_state.piece.move_down()
         if reached_bottom:
             game_state.piece = touch_bottom(game_area, game_state)
-    elif event.key == pygame.K_UP:
+    elif not game_state.is_paused and event.key == pygame.K_UP:
         game_state.piece.turn_once()
-    elif event.key == pygame.K_SPACE or event.key == pygame.K_d:
+    elif not game_state.is_paused and (event.key == pygame.K_SPACE or event.key == pygame.K_d):
         game_state.piece.goto_bottom()
         touch_bottom(game_area, game_state)
     elif event.key == pygame.K_s and game_state.is_gameover:
@@ -98,7 +90,7 @@ def on_key_down(event, game_area, game_state):
         if game_state.is_paused:
             game_state.resume_game()
         elif not game_state.is_gameover:
-            game_area, game_state = pause_game(game_area, game_state)
+            game_state.pause_game()
 
     return game_area, game_state
 
