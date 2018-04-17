@@ -11,6 +11,7 @@ class GameState():
     def __init__(self, screen, game_area):
         #self.score = 0
         self.is_gameover = True   #按s键开始游戏
+        self.is_paused = False
         self.screen = screen
         self.game_area = game_area
         self.piece = self.new_piece()
@@ -23,8 +24,22 @@ class GameState():
 
     def restart_game(self):
         self.is_gameover = False
-        self.game_timer = pygame.time.set_timer(pygame.USEREVENT, self.timer_interval)
+        self.set_timer(self.timer_interval)
         self.session_count += 1
+
+    def pause_game(self):
+        self.remove_timer()
+        self.is_paused = True
+
+    def resume_game(self):
+        self.set_timer(self.timer_interval)
+        self.is_paused = False
+
+    def set_timer(self, timer_interval):
+        self.game_timer = pygame.time.set_timer(pygame.USEREVENT, timer_interval)
+
+    def remove_timer(self):
+        self.game_timer = pygame.time.set_timer(pygame.USEREVENT, 0)
 
     def new_piece(self):
         shape = random.randint(0, len(SHAPES) - 1)

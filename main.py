@@ -36,7 +36,7 @@ def main():
         #设定屏幕背景色.screen.fill()将刷新整个窗口。
         screen.fill(BG_COLOR)
         #绘制游戏区
-        game_area.draw(game_state.score, game_state.is_gameover, game_state.session_count)
+        game_area.draw(game_state.score, game_state.is_gameover, game_state.session_count, game_state.is_paused)
 
         #更新方块
         game_state.piece.paint()
@@ -52,6 +52,14 @@ def prepare_game(screen):
 def start_game(screen):
     game_area, game_state = prepare_game(screen)
     game_state.restart_game()
+    return game_area, game_state
+
+
+def pause_game(game_area, game_state):
+    '''暂停游戏'''
+    game_state.pause_game()
+    # game_area.draw_pause()
+
     return game_area, game_state
 
 
@@ -86,6 +94,11 @@ def on_key_down(event, game_area, game_state):
         touch_bottom(game_area, game_state)
     elif event.key == pygame.K_s and game_state.is_gameover:
         game_area, game_state = start_game(game_area.screen)
+    elif event.key == pygame.K_p:
+        if game_state.is_paused:
+            game_state.resume_game()
+        elif not game_state.is_gameover:
+            game_area, game_state = pause_game(game_area, game_state)
 
     return game_area, game_state
 
