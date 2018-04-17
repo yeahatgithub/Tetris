@@ -15,9 +15,9 @@ class GameState():
         self.is_paused = False
         self.screen = screen
         self.wall = GameWall(screen)
-        self.piece = self.new_piece()
+        self.piece = None
         self.score = 0
-        self.timer_interval = 1000   #1000ms
+        self.timer_interval = TIMER_INTERVAL   #1000ms
         self.session_count = 0   #玩第几轮？
 
 
@@ -26,8 +26,10 @@ class GameState():
 
     def restart_game(self):
         self.is_gameover = False
-        self.set_timer(self.timer_interval)
+        self.set_timer(TIMER_INTERVAL)
+        self.timer_interval = TIMER_INTERVAL
         self.session_count += 1
+        self.piece = self.new_piece()
 
     def pause_game(self):
         self.remove_timer()

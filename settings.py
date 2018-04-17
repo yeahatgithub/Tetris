@@ -117,3 +117,4 @@ PIECE_COLORS = {
 }
 
 BLANK_LABEL = '-'    #20*10游戏区域中，单元格表示为'-'，意味着为空。
+TIMER_INTERVAL = 1000   #最开始方块每个1000ms下降1行。

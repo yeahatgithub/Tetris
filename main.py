@@ -17,7 +17,7 @@ def main():
     pygame.display.set_caption("俄罗斯方块")
     pygame.key.set_repeat(10, 100)  #一直按下某个键，每过100毫秒就引发一个KEYDOWN事件
 
-    game_state = prepare_game(screen)
+    game_state = GameState(screen)
 
     #游戏主循环
     while True:
@@ -30,17 +30,18 @@ def main():
         GameDisplay.draw(screen, game_state)
 
         #更新方块
-        game_state.piece.paint()
+        if game_state.piece:
+            game_state.piece.paint()
 
         #让最近绘制的屏幕可见
         pygame.display.flip()
 
-def prepare_game(screen):
-    game_state = GameState(screen)
-    return game_state
+# def prepare_game(screen):
+#     game_state = GameState(screen)
+#     return game_state
 
-def start_game(screen):
-    game_state = prepare_game(screen)
+def start_game(screen, game_state):
+    # game_state = prepare_game(screen)
     game_state.restart_game()
     return  game_state
 
@@ -60,10 +61,8 @@ def check_events(game_state):
 
 def on_key_down(event, game_state):
     if not game_state.is_paused and event.key == pygame.K_RIGHT:
-        # print("按下了右箭头")
         game_state.piece.move_right()
     elif not game_state.is_paused and event.key == pygame.K_LEFT:
-        # print("按下了左箭头")
         game_state.piece.move_left()
     elif not game_state.is_paused and event.key == pygame.K_DOWN:
         reached_bottom = game_state.piece.move_down()
@@ -75,7 +74,7 @@ def on_key_down(event, game_state):
         game_state.piece.goto_bottom()
         game_state.touch_bottom()
     elif event.key == pygame.K_s and game_state.is_gameover:
-        game_state = start_game(game_state.screen)
+        game_state = start_game(game_state.screen, game_state)
     elif event.key == pygame.K_p:
         if game_state.is_paused:
             game_state.resume_game()
