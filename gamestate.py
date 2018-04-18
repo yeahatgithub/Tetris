@@ -5,7 +5,7 @@
 
 import random
 from settings import *
-from pieces import Piece
+from piece import Piece
 from gamewall import GameWall
 import pygame
 class GameState():
@@ -24,12 +24,17 @@ class GameState():
     def gameover(self):
         self.is_gameover = True
 
-    def restart_game(self):
+    def start_game(self):
         self.is_gameover = False
         self.set_timer(TIMER_INTERVAL)
         self.timer_interval = TIMER_INTERVAL
         self.session_count += 1
         self.piece = self.new_piece()
+
+    def restart_game(self):
+        self.wall.clear()
+        self.start_game()
+
 
     def pause_game(self):
         self.remove_timer()

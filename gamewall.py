@@ -71,4 +71,9 @@ class GameWall():
             for c in range(COLUMN_NUM):
                 self.area[r][c] = self.area[r - 1][c]
 
+    def clear(self):
+        for r in range(LINE_NUM):
+            for c in range(COLUMN_NUM):
+                self.area[r][c] = BLANK_LABEL
+
 

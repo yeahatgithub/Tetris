@@ -40,10 +40,10 @@ def main():
 #     game_state = GameState(screen)
 #     return game_state
 
-def start_game(screen, game_state):
-    # game_state = prepare_game(screen)
-    game_state.restart_game()
-    return  game_state
+# def start_game(screen, game_state):
+#     # game_state = prepare_game(screen)
+#     game_state.start_game()
+#     return  game_state
 
 
 def check_events(game_state):
@@ -74,12 +74,16 @@ def on_key_down(event, game_state):
         game_state.piece.goto_bottom()
         game_state.touch_bottom()
     elif event.key == pygame.K_s and game_state.is_gameover:
-        game_state = start_game(game_state.screen, game_state)
+        game_state.restart_game()
     elif event.key == pygame.K_p:
         if game_state.is_paused:
             game_state.resume_game()
         elif not game_state.is_gameover:
             game_state.pause_game()
+    elif event.key == pygame.K_e:
+        sys.exit()
+    elif event.key == pygame.K_r:
+        game_state.restart_game()
 
     return game_state
 
