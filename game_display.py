@@ -12,15 +12,7 @@ class GameDisplay():
     @staticmethod
     def draw(screen, game_state):
         '''绘制游戏区域，即20*10的游戏区域'''
-        start_x = GAME_AREA_LEFT
-        start_y = GAME_AREA_TOP
-        # for r in range(LINE_NUM + 1):
-        #     pygame.draw.line(screen, EDGE_COLOR, (GAME_AREA_LEFT, GAME_AREA_TOP + r * CELL_WIDTH),
-        #                      (GAME_AREA_LEFT + GAME_AREA_WIDTH, GAME_AREA_TOP + r * CELL_WIDTH))
-        # for c in range(COLUMN_NUM + 1):
-        #     pygame.draw.line(screen, EDGE_COLOR, (GAME_AREA_LEFT + c * CELL_WIDTH, GAME_AREA_TOP),
-        #                      (GAME_AREA_LEFT + c * CELL_WIDTH, GAME_AREA_TOP + GAME_AREA_HEIGHT))
-        GameDisplay.draw_border(screen, GAME_AREA_LEFT, GAME_AREA_TOP, LINE_NUM, COLUMN_NUM)
+        GameDisplay.draw_border(screen, GAME_AREA_LEFT - EDGE_WIDTH, GAME_AREA_TOP, LINE_NUM, COLUMN_NUM)
 
         # 绘制未消掉方块组成的“墙”。
         for r in range(LINE_NUM):
