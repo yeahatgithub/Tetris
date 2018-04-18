@@ -61,13 +61,24 @@ class GameDisplay():
 
         if next_piece:
             start_x += EDGE_WIDTH
+            start_y += EDGE_WIDTH
+            cells = []    #记住要绘制的单元格
             shape_turn = next_piece.shape_template[next_piece.turn]
             for r in range(len(shape_turn)):
                 for c in range(len(shape_turn[0])):
                     if shape_turn[r][c] == 'O':
-                        # self.draw_cell(self.x + c, self.y + r)
-                        GameDisplay.draw_cell(screen, c * CELL_WIDTH + start_x,
-                                               r * CELL_WIDTH + start_y, PIECE_COLORS[next_piece.shape])
+                        cells.append( ( c,  r , PIECE_COLORS[next_piece.shape]) )
+
+            max_c = max([cell[0] for cell in cells])
+            min_c = min([cell[0] for cell in cells])
+            start_x += round( (4 - (max_c - min_c + 1)) / 2 * CELL_WIDTH)
+            max_r = max([cell[1] for cell in cells])
+            min_r = min([cell[1] for cell in cells])
+            start_y += round( (4 - (max_r - min_r + 1)) / 2 * CELL_WIDTH)
+
+            for cell in cells:
+                GameDisplay.draw_cell(screen, start_x + (cell[0] - min_c) * CELL_WIDTH,
+                                      (start_y - min_r) + cell[1] * CELL_WIDTH, cell[2])
 
     @staticmethod
     def draw_border(screen, start_x, start_y, line_num, column_num):
