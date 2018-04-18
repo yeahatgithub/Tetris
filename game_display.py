@@ -59,8 +59,15 @@ class GameDisplay():
         start_y = GAME_AREA_TOP
         GameDisplay.draw_border(screen, start_x, start_y, 4, 4)
 
-        start_x += EDGE_WIDTH
-        # next_piece.draw()
+        if next_piece:
+            start_x += EDGE_WIDTH
+            shape_turn = next_piece.shape_template[next_piece.turn]
+            for r in range(len(shape_turn)):
+                for c in range(len(shape_turn[0])):
+                    if shape_turn[r][c] == 'O':
+                        # self.draw_cell(self.x + c, self.y + r)
+                        GameDisplay.draw_cell(screen, c * CELL_WIDTH + start_x,
+                                               r * CELL_WIDTH + start_y, PIECE_COLORS[next_piece.shape])
 
     @staticmethod
     def draw_border(screen, start_x, start_y, line_num, column_num):
