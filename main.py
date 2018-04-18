@@ -31,7 +31,7 @@ def main():
 
         #更新方块
         if game_state.piece:
-            game_state.piece.paint()
+            game_state.piece.draw()
 
         #让最近绘制的屏幕可见
         pygame.display.flip()

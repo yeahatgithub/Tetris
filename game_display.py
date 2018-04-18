@@ -12,12 +12,15 @@ class GameDisplay():
     @staticmethod
     def draw(screen, game_state):
         '''绘制游戏区域，即20*10的游戏区域'''
-        for r in range(LINE_NUM + 1):
-            pygame.draw.line(screen, EDEG_COLOR, (GAME_AREA_LEFT, GAME_AREA_TOP + r * CELL_WIDTH),
-                             (GAME_AREA_LEFT + GAME_AREA_WIDTH, GAME_AREA_TOP + r * CELL_WIDTH))
-        for c in range(COLUMN_NUM + 1):
-            pygame.draw.line(screen, EDEG_COLOR, (GAME_AREA_LEFT + c * CELL_WIDTH, GAME_AREA_TOP),
-                             (GAME_AREA_LEFT + c * CELL_WIDTH, GAME_AREA_TOP + GAME_AREA_HEIGHT))
+        start_x = GAME_AREA_LEFT
+        start_y = GAME_AREA_TOP
+        # for r in range(LINE_NUM + 1):
+        #     pygame.draw.line(screen, EDGE_COLOR, (GAME_AREA_LEFT, GAME_AREA_TOP + r * CELL_WIDTH),
+        #                      (GAME_AREA_LEFT + GAME_AREA_WIDTH, GAME_AREA_TOP + r * CELL_WIDTH))
+        # for c in range(COLUMN_NUM + 1):
+        #     pygame.draw.line(screen, EDGE_COLOR, (GAME_AREA_LEFT + c * CELL_WIDTH, GAME_AREA_TOP),
+        #                      (GAME_AREA_LEFT + c * CELL_WIDTH, GAME_AREA_TOP + GAME_AREA_HEIGHT))
+        GameDisplay.draw_border(screen, GAME_AREA_LEFT, GAME_AREA_TOP, LINE_NUM, COLUMN_NUM)
 
         # 绘制未消掉方块组成的“墙”。
         for r in range(LINE_NUM):
@@ -26,6 +29,7 @@ class GameDisplay():
                     GameDisplay.draw_cell(screen, c, r, PIECE_COLORS[game_state.wall.area[r][c]])
 
         GameDisplay.draw_score(screen, game_state.score)
+        GameDisplay.draw_next_piece(screen, None)
         GameDisplay.draw_mannual(screen)
         if game_state.is_gameover:
             GameDisplay.draw_gameover(screen, game_state.session_count)  # 游戏结束！
@@ -49,7 +53,7 @@ class GameDisplay():
         # 添加下画线
         score_label_font.set_underline(True)
         score_label_surface = score_label_font.render(u'得分：', False, SCORE_LABEL_COLOR)
-        score_label_position = (GAME_AREA_LEFT + COLUMN_NUM * CELL_WIDTH + 40, GAME_AREA_TOP)
+        score_label_position = (GAME_AREA_LEFT + COLUMN_NUM * CELL_WIDTH + MARGIN_WIDTH, GAME_AREA_TOP + 6 * CELL_WIDTH)
         screen.blit(score_label_surface, score_label_position)
 
         score_font = pygame.font.SysFont('arial', 36)
@@ -57,6 +61,30 @@ class GameDisplay():
         score_label_width = score_label_surface.get_width()
         score_position = (score_label_position[0] + score_label_width + 20, score_label_position[1])
         screen.blit(score_surface, score_position)
+
+    @staticmethod
+    def draw_next_piece(screen, next_piece):
+        '''绘制下一方块'''
+        start_x = GAME_AREA_LEFT + COLUMN_NUM * CELL_WIDTH + MARGIN_WIDTH * 2
+        start_y = GAME_AREA_TOP
+        GameDisplay.draw_border(screen, start_x, start_y, 4, 4)
+
+    @staticmethod
+    def draw_border(screen, start_x, start_y, line_num, column_num):
+        top_border = pygame.Rect(start_x, start_y, 2 * EDGE_WIDTH + column_num * CELL_WIDTH, EDGE_WIDTH)
+        pygame.draw.rect(screen, EDGE_COLOR, top_border)
+
+        left_border = pygame.Rect(start_x, start_y, EDGE_WIDTH, 2 * EDGE_WIDTH + line_num * CELL_WIDTH)
+        pygame.draw.rect(screen, EDGE_COLOR, left_border)
+
+        right_border = pygame.Rect(start_x + EDGE_WIDTH + column_num * CELL_WIDTH, start_y, EDGE_WIDTH,
+                                   2 * EDGE_WIDTH + line_num * CELL_WIDTH)
+        pygame.draw.rect(screen, EDGE_COLOR, right_border)
+
+        bottom_border = pygame.Rect(start_x, start_y + EDGE_WIDTH + line_num * CELL_WIDTH,
+                                    2 * EDGE_WIDTH + column_num * CELL_WIDTH, EDGE_WIDTH)
+        pygame.draw.rect(screen, EDGE_COLOR, bottom_border)
+
 
     @staticmethod
     def draw_gameover(screen, session_count):

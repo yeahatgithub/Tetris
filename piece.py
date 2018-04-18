@@ -18,7 +18,7 @@ class Piece():
         self.screen = screen
         self.game_area = game_area
 
-    def paint(self):
+    def draw(self):
         shape_turn = self.shape_template[self.turn]
         #print(shape_turn)
         for r in range(len(shape_turn)):
