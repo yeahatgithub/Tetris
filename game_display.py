@@ -12,17 +12,16 @@ class GameDisplay():
     @staticmethod
     def draw(screen, game_state):
         '''绘制游戏区域，即20*10的游戏区域'''
-        GameDisplay.draw_border(screen, GAME_AREA_LEFT - EDGE_WIDTH, GAME_AREA_TOP, LINE_NUM, COLUMN_NUM)
+        GameDisplay.draw_border(screen, GAME_AREA_LEFT - EDGE_WIDTH, GAME_AREA_TOP - EDGE_WIDTH, LINE_NUM, COLUMN_NUM)
 
         # 绘制未消掉方块组成的“墙”。
-        for r in range(LINE_NUM):
-            for c in range(COLUMN_NUM):
-                if game_state.wall.area[r][c] != BLANK_LABEL:
-                    GameDisplay.draw_cell(screen, c, r, PIECE_COLORS[game_state.wall.area[r][c]])
+        game_state.wall.draw(screen)
 
         GameDisplay.draw_score(screen, game_state.score)
-        GameDisplay.draw_next_piece(screen, None)
+        GameDisplay.draw_next_piece(screen, game_state.next_piece)
+
         GameDisplay.draw_mannual(screen)
+
         if game_state.is_gameover:
             GameDisplay.draw_gameover(screen, game_state.session_count)  # 游戏结束！
         if game_state.is_paused:
@@ -30,9 +29,8 @@ class GameDisplay():
 
     @staticmethod
     def draw_cell(screen, x, y, color):
-        '''第y行x列的格子里填充color颜色。一种方块对应一种颜色。'''
-        cell_position = (x * CELL_WIDTH + GAME_AREA_LEFT + 1,
-                         y * CELL_WIDTH + GAME_AREA_TOP + 1)
+        '''(x, y)是单元格的左上角坐标。单元格里里填充color颜色。一种方块对应一种颜色。'''
+        cell_position = (x + 1,  y + 1)
         cell_width_height = (CELL_WIDTH - 2, CELL_WIDTH - 2)
         cell_rect = pygame.Rect(cell_position, cell_width_height)
         pygame.draw.rect(screen, color, cell_rect)
@@ -60,6 +58,9 @@ class GameDisplay():
         start_x = GAME_AREA_LEFT + COLUMN_NUM * CELL_WIDTH + MARGIN_WIDTH * 2
         start_y = GAME_AREA_TOP
         GameDisplay.draw_border(screen, start_x, start_y, 4, 4)
+
+        start_x += EDGE_WIDTH
+        # next_piece.draw()
 
     @staticmethod
     def draw_border(screen, start_x, start_y, line_num, column_num):

@@ -4,6 +4,7 @@
 # @Copyright:  MIT
 # import pygame
 from settings import *
+from game_display import GameDisplay
 
 
 '''
@@ -75,5 +76,13 @@ class GameWall():
         for r in range(LINE_NUM):
             for c in range(COLUMN_NUM):
                 self.area[r][c] = BLANK_LABEL
+
+
+    def draw(self, screen):
+        for r in range(LINE_NUM):
+            for c in range(COLUMN_NUM):
+                if self.area[r][c] != BLANK_LABEL:
+                    GameDisplay.draw_cell(screen, c * CELL_WIDTH + GAME_AREA_LEFT,
+                                          r * CELL_WIDTH + GAME_AREA_TOP, PIECE_COLORS[self.area[r][c]])
 
 

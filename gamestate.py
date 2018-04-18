@@ -16,6 +16,7 @@ class GameState():
         self.screen = screen
         self.wall = GameWall(screen)
         self.piece = None
+        self.next_piece = None
         self.score = 0
         self.timer_interval = TIMER_INTERVAL   #1000ms
         self.session_count = 0   #玩第几轮？
@@ -29,7 +30,8 @@ class GameState():
         self.set_timer(TIMER_INTERVAL)
         self.timer_interval = TIMER_INTERVAL
         self.session_count += 1
-        self.piece = self.new_piece()
+        self.new_piece()   #此时, self.piece = None
+        self.new_piece()   #此时，self.piece, self.next_piece都不等于None
 
     def restart_game(self):
         self.wall.clear()
@@ -52,7 +54,8 @@ class GameState():
 
     def new_piece(self):
         shape = random.randint(0, len(SHAPES) - 1)
-        self.piece = Piece(SHAPES[shape], self.screen, self.wall)
+        self.piece = self.next_piece
+        self.next_piece = Piece(SHAPES[shape], self.screen, self.wall)
         return self.piece
 
     def add_score(self, eliminated_line_num):

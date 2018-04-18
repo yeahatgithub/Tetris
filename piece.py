@@ -24,10 +24,12 @@ class Piece():
         for r in range(len(shape_turn)):
             for c in range(len(shape_turn[0])):
                 if shape_turn[r][c] == 'O':
-                    self.draw_cell(self.x + c, self.y + r)
+                    # self.draw_cell(self.x + c, self.y + r)
+                    GameDisplay.draw_cell(self.screen, (self.x + c) * CELL_WIDTH + GAME_AREA_LEFT,
+                                          (self.y + r) * CELL_WIDTH + GAME_AREA_TOP, PIECE_COLORS[self.shape])
 
-    def draw_cell(self, x, y):
-        GameDisplay.draw_cell(self.screen, x, y, PIECE_COLORS[self.shape])
+    # def draw_cell(self, x, y):
+    #     GameDisplay.draw_cell(self.screen, x, y, PIECE_COLORS[self.shape])
 
     def can_move_right(self):
         '''判断能否向右移动方块'''
