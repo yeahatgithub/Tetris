@@ -10,7 +10,6 @@ from gamewall import GameWall
 import pygame
 class GameState():
     def __init__(self, screen):
-        #self.score = 0
         self.is_gameover = True   #按s键开始游戏
         self.is_paused = False
         self.screen = screen
@@ -32,6 +31,7 @@ class GameState():
         self.session_count += 1
         self.new_piece()   #此时, self.piece = None
         self.new_piece()   #此时，self.piece, self.next_piece都不等于None
+        self.score = 0
 
     def restart_game(self):
         self.wall.clear()
