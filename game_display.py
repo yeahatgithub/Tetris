@@ -10,7 +10,7 @@ class GameDisplay():
     '''主程序的工具类。是绘制操作的集散地。'''
 
     @staticmethod
-    def draw(screen, game_state):
+    def draw(screen, game_state, game_images):
         '''绘制游戏区域，即20*10的游戏区域'''
         GameDisplay.draw_border(screen, GAME_AREA_LEFT - EDGE_WIDTH, GAME_AREA_TOP - EDGE_WIDTH, LINE_NUM, COLUMN_NUM)
 
@@ -23,9 +23,9 @@ class GameDisplay():
         GameDisplay.draw_mannual(screen)
 
         if game_state.is_gameover:
-            GameDisplay.draw_gameover(screen, game_state.session_count)  # 游戏结束！
+            GameDisplay.draw_gameover(screen, game_state.session_count, game_images)  # 游戏结束！
         if game_state.is_paused:
-            GameDisplay.draw_pause(screen)
+            GameDisplay.draw_pause(screen, game_images)
 
     @staticmethod
     def draw_cell(screen, x, y, color):
@@ -98,29 +98,25 @@ class GameDisplay():
 
 
     @staticmethod
-    def draw_gameover(screen, session_count):
+    def draw_gameover(screen, session_count, game_images):
         '''显示游戏结束'''
-        gameover_font = pygame.font.SysFont('stkaiti', 36)
-        gameover_surface = gameover_font.render(u'游戏结束', False, GAMEOVER_COLOR)
-        gameover_position = (GAME_AREA_LEFT + 4 * CELL_WIDTH - CELL_WIDTH // 2, GAME_AREA_TOP + 10 * CELL_WIDTH)
-
-        start_tip_surface = gameover_font.render(u'按s键开始新游戏', False, GAMEOVER_COLOR)
-        start_tip_position = (GAME_AREA_LEFT + 2 * CELL_WIDTH, GAME_AREA_TOP + 11 * CELL_WIDTH)
         if session_count > 0:
-            screen.blit(gameover_surface, gameover_position)
-        screen.blit(start_tip_surface, start_tip_position)
+            gameover_position = (GAME_AREA_LEFT + 4 * CELL_WIDTH - CELL_WIDTH // 2, GAME_AREA_TOP + 8 * CELL_WIDTH)
+            screen.blit(game_images.load_gameover_img(), gameover_position)
+
+        start_tip_position = (GAME_AREA_LEFT + 2 * CELL_WIDTH, GAME_AREA_TOP + 10 * CELL_WIDTH)
+        screen.blit(game_images.load_newgame_img(), start_tip_position)
+
+
 
     @staticmethod
-    def draw_pause(screen):
+    def draw_pause(screen, game_images):
         '''显示游戏暂停'''
-        pause_font = pygame.font.SysFont('stkaiti', 36)
-        pause_surface = pause_font.render(u'游戏暂停中', False, GAMEOVER_COLOR)
-        pause_position = (GAME_AREA_LEFT + 3 * CELL_WIDTH, GAME_AREA_TOP + 10 * CELL_WIDTH)
+        pause_position = (GAME_AREA_LEFT + 1 * CELL_WIDTH, GAME_AREA_TOP + 9 * CELL_WIDTH)
+        screen.blit(game_images.load_pausing_img(), pause_position)
 
-        resume_tip_surface = pause_font.render(u'按p键继续', False, GAMEOVER_COLOR)
-        resume_tip_position = (GAME_AREA_LEFT + 3 * CELL_WIDTH, GAME_AREA_TOP + 11 * CELL_WIDTH)
-        screen.blit(pause_surface, pause_position)
-        screen.blit(resume_tip_surface, resume_tip_position)
+        resume_tip_position = (GAME_AREA_LEFT + 1 * CELL_WIDTH, GAME_AREA_TOP + 11 * CELL_WIDTH)
+        screen.blit(game_images.load_continue_img(), resume_tip_position)
 
     @staticmethod
     def draw_mannual(screen):

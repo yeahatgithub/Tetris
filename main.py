@@ -7,6 +7,7 @@ from settings import *
 # from gamewall import GameWall
 from gamestate import GameState
 from game_display import GameDisplay
+from game_images import GameImages
 
 def main():
     #初始化pygame
@@ -16,7 +17,7 @@ def main():
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption("俄罗斯方块")
     pygame.key.set_repeat(10, 100)  #一直按下某个键，每过100毫秒就引发一个KEYDOWN事件
-
+    game_images = GameImages()
     game_state = GameState(screen)
 
     #游戏主循环
@@ -27,7 +28,7 @@ def main():
         #设定屏幕背景色.screen.fill()将刷新整个窗口。
         screen.fill(BG_COLOR)
         #绘制游戏区
-        GameDisplay.draw(screen, game_state)
+        GameDisplay.draw(screen, game_state, game_images)
 
         #更新方块
         if game_state.piece:
