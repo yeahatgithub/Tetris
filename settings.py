@@ -121,4 +121,4 @@ PIECE_COLORS = {
 
 BLANK_LABEL = '-'    #20*10游戏区域中，单元格表示为'-'，意味着为空。
 TIMER_INTERVAL = 1000   #最开始方块每个1000ms下降1行。
-SCORE_PER_LEVEL = 100  #得到2000分升一级。
+SCORE_PER_LEVEL = 2000  #得到2000分升一级。

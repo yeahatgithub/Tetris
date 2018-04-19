@@ -42,20 +42,12 @@ def check_events(game_state, game_resource):
         elif event.type == pygame.KEYDOWN:
             game_state = on_key_down(event, game_state, game_resource)
         elif event.type == pygame.USEREVENT and not game_state.is_gameover:
-            # 此处偶尔发生过“当前方块消失的现象”，即game_state.piece为None的情形。原因未知。
-            if not game_state.piece:
-                game_state.new_piece()            #此处采用变通方法，修订了“当前方块消失的现象”。
-
             reached_bottom = game_state.piece.move_down()
             if reached_bottom:
                 game_state.touch_bottom()
     return  game_state
 
 def on_key_down(event, game_state, game_resource):
-    # 此处偶尔发生过“当前方块消失的现象”，即game_state.piece为None的情形。原因未知。
-    if not game_state.piece:
-        game_state.new_piece()   #此处采用变通方法，修订了“当前方块消失的现象”。
-
     if not game_state.is_paused and event.key == pygame.K_RIGHT:
         game_state.piece.move_right()
     elif not game_state.is_paused and event.key == pygame.K_LEFT:
@@ -63,7 +55,7 @@ def on_key_down(event, game_state, game_resource):
     elif not game_state.is_paused and event.key == pygame.K_DOWN:
         reached_bottom = game_state.piece.move_down()
         if reached_bottom:
-            game_state.piece = game_state.touch_bottom()
+            game_state.touch_bottom()
     elif not game_state.is_paused and event.key == pygame.K_UP:
         game_state.piece.turn_once()
     elif not game_state.is_paused and (event.key == pygame.K_SPACE or event.key == pygame.K_d):
