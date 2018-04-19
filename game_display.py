@@ -26,6 +26,7 @@ class GameDisplay():
             game_state.piece.draw()
 
         GameDisplay.draw_score(screen, game_state.score)
+        GameDisplay.draw_level(screen, game_state.level)
         GameDisplay.draw_next_piece(screen, game_state.next_piece)
 
         GameDisplay.draw_mannual(screen)
@@ -59,6 +60,25 @@ class GameDisplay():
         score_label_width = score_label_surface.get_width()
         score_position = (score_label_position[0] + score_label_width + 20, score_label_position[1])
         screen.blit(score_surface, score_position)
+
+
+    @staticmethod
+    def draw_level(screen, level):
+        '''绘制游戏难度级别'''
+        level_label_font = pygame.font.SysFont('stkaiti', 28)  # 换成'arial'，无法显示中文。
+
+        # 添加下画线
+        level_label_font.set_underline(True)
+        level_label_surface = level_label_font.render(u'难度：', False, SCORE_LABEL_COLOR)
+        level_label_position = (GAME_AREA_LEFT + COLUMN_NUM * CELL_WIDTH + MARGIN_WIDTH, GAME_AREA_TOP + 8 * CELL_WIDTH)
+        screen.blit(level_label_surface, level_label_position)
+
+        level_font = pygame.font.SysFont('arial', 36)
+        level_surface = level_font.render(str(level), False, (255, 0, 0))
+        level_label_width = level_label_surface.get_width()
+        level_position = (level_label_position[0] + level_label_width + 20, level_label_position[1])
+        screen.blit(level_surface, level_position)
+
 
     @staticmethod
     def draw_next_piece(screen, next_piece):

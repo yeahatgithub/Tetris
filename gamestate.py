@@ -19,6 +19,7 @@ class GameState():
         self.score = 0
         self.timer_interval = TIMER_INTERVAL   #1000ms
         self.session_count = 0   #玩第几轮？
+        self.level = 1          #难度等级。一共20级。得到2000分升一级。每升一级提速50ms（即timer_interval减少50）
 
 
     def gameover(self):
@@ -74,6 +75,11 @@ class GameState():
             self.score += 400
         else:
             self.score += 800
+
+        level = self.score // SCORE_PER_LEVEL + 1
+        if level > self.level:
+            self.set_timer( TIMER_INTERVAL - (level - 1) * 50)
+            self.level = level
 
     def touch_bottom(self):
         '''方块落到底部时，要消行，要生成新方块。如果触到顶部，游戏终止。'''
