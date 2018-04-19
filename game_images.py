@@ -5,11 +5,18 @@
 import pygame
 class GameImages():
     def __init__(self):
+        self.bg_img = None
         self.gameover_img = None
         self.pausing_img = None
         self.continue_img = None
         self.newgame_img = None
         self.path = 'images/'
+
+    def load_bg_img(self):
+        if not self.bg_img:
+            self.bg_img = pygame.image.load(self.path + "bg-1.jpg")
+
+        return self.bg_img
 
     def load_gameover_img(self):
         if not self.gameover_img:

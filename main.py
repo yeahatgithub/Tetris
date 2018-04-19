@@ -26,7 +26,7 @@ def main():
         game_state = check_events(game_state)
 
         #设定屏幕背景色.screen.fill()将刷新整个窗口。
-        screen.fill(BG_COLOR)
+        # screen.fill(BG_COLOR)
         #绘制游戏区
         GameDisplay.draw(screen, game_state, game_images)
 

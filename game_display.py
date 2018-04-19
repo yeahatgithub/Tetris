@@ -11,7 +11,11 @@ class GameDisplay():
 
     @staticmethod
     def draw(screen, game_state, game_images):
-        '''绘制游戏区域，即20*10的游戏区域'''
+        '''绘制窗口'''
+        #绘制背景
+        screen.blit(game_images.load_bg_img(), (0, 0))
+
+        #绘制游戏区域边界
         GameDisplay.draw_border(screen, GAME_AREA_LEFT - EDGE_WIDTH, GAME_AREA_TOP - EDGE_WIDTH, LINE_NUM, COLUMN_NUM)
 
         # 绘制未消掉方块组成的“墙”。
