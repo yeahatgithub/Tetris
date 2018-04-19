@@ -1,22 +1,21 @@
 from settings import *
-import pygame
+from game_display import GameDisplay
 
 #Piece是方块类
 #(x, y)是包围方块的矩形框的左上角在游戏区的坐标
 #shape是方块代号，用作PIECES字典的键。
 #turn是方块的翻转次数，决定方块的角度
 #screen是窗口对象
-from game_display import GameDisplay
 
 class Piece():
-    def __init__(self, shape, screen, game_area):
+    def __init__(self, shape, screen, game_wall):
         self.x = 3
         self.y = 0
         self.shape = shape
         self.shape_template = PIECES[shape]
         self.turn = 0   #未翻转
         self.screen = screen
-        self.game_area = game_area
+        self.game_wall = game_wall
 
     def draw(self):
         shape_turn = self.shape_template[self.turn]
@@ -39,7 +38,7 @@ class Piece():
                 if shape_turn[r][c] == 'O':
                     if self.x + c == COLUMN_NUM - 1:
                         return False
-                    elif self.game_area.is_wall(self.y + r, self.x + c + 1):
+                    elif self.game_wall.is_wall(self.y + r, self.x + c + 1):
                         return False
         return True
 
@@ -55,7 +54,7 @@ class Piece():
                 if shape_turn[r][c] == 'O':
                     if self.x + c == 0:
                         return False
-                    elif self.game_area.is_wall(self.y + r, self.x + c - 1):
+                    elif self.game_wall.is_wall(self.y + r, self.x + c - 1):
                         return False
         return True
 
@@ -67,7 +66,7 @@ class Piece():
                 if shape_turn[r][c] == 'O':
                     if self.y + r == LINE_NUM - 1:
                         return False   #方块已到达底部
-                    elif self.game_area.is_wall(self.y + r + 1, self.x + c):
+                    elif self.game_wall.is_wall(self.y + r + 1, self.x + c):
                         return False
         return True
 
@@ -102,7 +101,7 @@ class Piece():
                     # print("row:", r + self.y, "column:", c + self.x)
                     if c + self.x < 0 or c + self.x >= COLUMN_NUM or r + self.y < 0 or r + self.y >= LINE_NUM:
                         return False   #出界
-                    if self.game_area.is_wall(r + self.y, c + self.x):
+                    if self.game_wall.is_wall(r + self.y, c + self.x):
                         return False
         return True
 
@@ -119,4 +118,4 @@ class Piece():
         for r in range(len(shape_turn)):
             for c in range(len(shape_turn[0])):
                 if shape_turn[r][c] == 'O':
-                    self.game_area.set_cell((self.x + c, self.y + r), self.shape)
+                    self.game_wall.set_cell((self.x + c, self.y + r), self.shape)

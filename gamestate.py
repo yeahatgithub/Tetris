@@ -87,7 +87,6 @@ class GameState():
         for c in range(COLUMN_NUM):
             if self.wall.is_wall(0, c):
                 # game_area.draw_gameover()   #在这里绘制文字是不起作用的。必须放到主循环中。
-                # print("game over!")
                 self.gameover()
                 break
         if not self.is_gameover:
